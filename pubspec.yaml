@@ -40,6 +40,7 @@ dependencies:
   logger: ^2.6.2
   iconsax: ^0.0.8
   shadcn_ui: ^0.39.3
+  interactive_json_preview: ^0.1.0
 
 dev_dependencies:
   flutter_test:

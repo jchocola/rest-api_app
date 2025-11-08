@@ -1,8 +1,12 @@
 import 'package:api_client/core/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-
+///
+/// LOGGER
+///
+final logger = Logger();
 
 void main() {
   runApp(const MyApp());
