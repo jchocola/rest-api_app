@@ -1,5 +1,6 @@
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/presentation/drawer_page/drawer_page.dart';
+import 'package:api_client/presentation/history_page/history_page.dart';
 import 'package:api_client/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -17,6 +18,14 @@ class HomePage extends StatelessWidget {
       );
     }
 
+     void _onHistoryPressed() {
+      showShadSheet(
+        side: ShadSheetSide.right,
+        context: context,
+        builder: (context) => const HistoryPage(side: ShadSheetSide.right),
+      );
+    }
+
     return Scaffold(
       ///
       /// APP BAR
@@ -28,7 +37,7 @@ class HomePage extends StatelessWidget {
           icon: const Icon(AppIcons.menuIcon),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(AppIcons.historyIcon)),
+          IconButton(onPressed: () => _onHistoryPressed(), icon: const Icon(AppIcons.historyIcon)),
         ],
       ),
 
