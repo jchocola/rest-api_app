@@ -1,16 +1,19 @@
-# api_client
+# REST API CLIENT APP
 
-A new Flutter project.
+Mobile app for test REST API
 
-## Getting Started
+## MAIN FEATURE
+    - GET - POST - PUT - PATCH - DELETE - OPTIONS - HEAD
+    - Cached request history
+    - Safety control API keys
+    - 
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## TECH STACK
+    - Flutter 3.35.5 - Dart 3.9.2
+    - BloC
+    - Dio 
+    - tostore
+    - shadcn_ui
+    - go_router
+    - interactive_json_preview
+    - flutter_secure_storage    

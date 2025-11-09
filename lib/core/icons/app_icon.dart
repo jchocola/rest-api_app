@@ -13,4 +13,9 @@ class AppIcons {
   static const IconData feedbackIcon = Icons.feedback_outlined;
   static const IconData aboutUsIcon = Iconsax.info_circle;
   static const IconData faqsIcon = Iconsax.message_question;
+
+  static const IconData copyIcon = Iconsax.copy;
+
+  static const IconData deleteIcon = Icons.delete;
+  static const IconData editIcon = Icons.edit;
 }

@@ -1,6 +1,7 @@
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class DrawerPage extends StatelessWidget {
@@ -36,6 +37,7 @@ class DrawerPage extends StatelessWidget {
               ShadButton.ghost(
                 leading: Icon(AppIcons.keyIcon),
                 child: Text('Keys'),
+                onPressed: () => context.go('/keys')
               ),
 
                ShadButton.ghost(
