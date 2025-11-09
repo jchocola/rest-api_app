@@ -41,8 +41,8 @@ dependencies:
   iconsax: ^0.0.8
   shadcn_ui: ^0.39.3
   interactive_json_preview: ^0.1.0
-  flutter_keychain: ^2.5.0
   flutter_slidable: ^4.0.3
+  share_plus: ^12.0.1
 
 dev_dependencies:
   flutter_test:

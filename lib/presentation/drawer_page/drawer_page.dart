@@ -1,13 +1,29 @@
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/icons/app_icon.dart';
+import 'package:api_client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({super.key, required this.side});
 
   final ShadSheetSide side;
+
+  void _onShareAppTapped() async {
+    try {
+      final result = await SharePlus.instance.share(
+        ShareParams(text: 'check out my website https://example.com'),
+      );
+
+      if (result.status == ShareResultStatus.success) {
+        logger.i('Thank you for sharing my website!');
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +36,12 @@ class DrawerPage extends StatelessWidget {
         //   maxWidth: size.width * AppConstant.drawerWidthFactor,
         // ),
         title: const Text('REST API Client'),
+
         // description: const Text(
         //   "Make changes to your profile here. Click save when you're done",
         // ),
 
         // actions: const [ShadButton(child: Text('Save changes'))],
-
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Column(
@@ -37,35 +53,36 @@ class DrawerPage extends StatelessWidget {
               ShadButton.ghost(
                 leading: Icon(AppIcons.keyIcon),
                 child: Text('Keys'),
-                onPressed: () => context.push('/keys')
+                onPressed: () => context.push('/keys'),
               ),
 
-               ShadButton.ghost(
+              ShadButton.ghost(
                 leading: Icon(AppIcons.rateUsIcon),
                 child: Text('Rate us'),
               ),
 
-               ShadButton.ghost(
+              ShadButton.ghost(
                 leading: Icon(AppIcons.shareIcon),
                 child: Text('Share app'),
+                onPressed: _onShareAppTapped,
               ),
 
-               ShadButton.ghost(
+              ShadButton.ghost(
                 leading: Icon(AppIcons.privacyIcon),
                 child: Text('Privacy policy'),
               ),
 
-               ShadButton.ghost(
+              ShadButton.ghost(
                 leading: Icon(AppIcons.faqsIcon),
                 child: Text('FAQs'),
               ),
 
-               ShadButton.ghost(
+              ShadButton.ghost(
                 leading: Icon(AppIcons.feedbackIcon),
                 child: Text('Feedback'),
               ),
 
-               ShadButton.ghost(
+              ShadButton.ghost(
                 leading: Icon(AppIcons.aboutUsIcon),
                 child: Text('About Us'),
               ),
