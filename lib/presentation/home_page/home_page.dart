@@ -78,6 +78,8 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
       child: Column(
         children: [
+          SizedBox(height: AppConstant.appPadding/2,),
+
           // methods and input fields will go here
           Row(
             children: [
