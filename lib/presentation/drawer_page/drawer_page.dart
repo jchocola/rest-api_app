@@ -33,10 +33,10 @@ class DrawerPage extends StatelessWidget {
 
             spacing: 16,
             children: [
-              // ShadButton.ghost(
-              //   leading: Icon(Icons.language),
-              //   child: Text('Language'),
-              // ),
+              ShadButton.ghost(
+                leading: Icon(AppIcons.keyIcon),
+                child: Text('Keys'),
+              ),
 
                ShadButton.ghost(
                 leading: Icon(AppIcons.rateUsIcon),
@@ -45,18 +45,18 @@ class DrawerPage extends StatelessWidget {
 
                ShadButton.ghost(
                 leading: Icon(AppIcons.shareIcon),
-                child: Text('Share with a friend'),
+                child: Text('Share app'),
               ),
 
                ShadButton.ghost(
                 leading: Icon(AppIcons.privacyIcon),
-                child: Text('Privacy Policy'),
+                child: Text('Privacy policy'),
               ),
 
-              //  ShadButton.ghost(
-              //   leading: Icon(Icons.language),
-              //   child: Text('Terms of Service'),
-              // ),
+               ShadButton.ghost(
+                leading: Icon(AppIcons.faqsIcon),
+                child: Text('FAQs'),
+              ),
 
                ShadButton.ghost(
                 leading: Icon(AppIcons.feedbackIcon),

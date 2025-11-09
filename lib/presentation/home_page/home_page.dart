@@ -138,10 +138,10 @@ class _HomePageState extends State<HomePage> {
                 value: 'Headers',
                 child: Center(child: Text('Headers')),
               ),
-              // ShadTab(
-              //   value: 'Auth',
-              //   child: Center(child: Text('Auth')),
-              // ),
+              ShadTab(
+                value: 'Auth',
+                child: Center(child: Text('Auth')),
+              ),
               ShadTab(
                 value: 'Body',
                 child: Center(child: Text('Body')),
@@ -173,8 +173,8 @@ class _HomePageState extends State<HomePage> {
         return const QueryParametersWidget();
       case 'Headers':
         return const HeaderParameterWidget();
-      // case 'Auth':
-      //   return const Center(child: Text('Auth Content'));
+      case 'Auth':
+        return const Center(child: Text('Auth Content'));
       case 'Body':
         return const BodyParametersWidget();
       default:
