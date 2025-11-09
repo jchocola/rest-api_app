@@ -1,6 +1,7 @@
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/main.dart';
+import 'package:api_client/presentation/faq_page/faq_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -74,6 +75,7 @@ class DrawerPage extends StatelessWidget {
 
               ShadButton.ghost(
                 leading: Icon(AppIcons.faqsIcon),
+                onPressed: ()=> context.push('/faq'),
                 child: Text('FAQs'),
               ),
 
