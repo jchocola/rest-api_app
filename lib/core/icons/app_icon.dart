@@ -18,4 +18,6 @@ class AppIcons {
 
   static const IconData deleteIcon = Icons.delete;
   static const IconData editIcon = Icons.edit;
+
+  static const IconData addIcon = Icons.add;
 }

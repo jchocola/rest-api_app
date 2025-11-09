@@ -37,7 +37,7 @@ class DrawerPage extends StatelessWidget {
               ShadButton.ghost(
                 leading: Icon(AppIcons.keyIcon),
                 child: Text('Keys'),
-                onPressed: () => context.go('/keys')
+                onPressed: () => context.push('/keys')
               ),
 
                ShadButton.ghost(
