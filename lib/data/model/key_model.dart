@@ -1,0 +1,32 @@
+import 'dart:convert';
+
+class KeyModel {
+  final String id;
+  final String name;
+  final String value;
+  KeyModel({
+    required this.id,
+    required this.name,
+    required this.value,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'value': value,
+    };
+  }
+
+  factory KeyModel.fromMap(Map<String, dynamic> map) {
+    return KeyModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      value: map['value'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory KeyModel.fromJson(String source) => KeyModel.fromMap(json.decode(source));
+}
