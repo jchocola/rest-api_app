@@ -3,6 +3,7 @@ import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/presentation/drawer_page/drawer_page.dart';
 import 'package:api_client/presentation/history_page/history_page.dart';
+import 'package:api_client/presentation/home_page/widgets/auth_parameters_widget.dart';
 import 'package:api_client/presentation/home_page/widgets/body_parameters_widget.dart';
 import 'package:api_client/presentation/home_page/widgets/header_parameters_widget.dart';
 import 'package:api_client/presentation/home_page/widgets/query_parameters_widget.dart';
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return GestureDetector(
-      onTap: ()=> FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         ///
         /// APP BAR
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      
+
         /// BODY
         body: _buildBody(context),
       ),
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
       child: Column(
         children: [
-          SizedBox(height: AppConstant.appPadding/2,),
+          SizedBox(height: AppConstant.appPadding / 2),
 
           // methods and input fields will go here
           Row(
@@ -169,7 +170,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   Widget _buildContent(BuildContext context) {
     switch (selectedTab) {
       case 'Query':
@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
       case 'Headers':
         return const HeaderParameterWidget();
       case 'Auth':
-        return const Center(child: Text('Auth Content'));
+        return const AuthParametersWidget();
       case 'Body':
         return const BodyParametersWidget();
       default:
