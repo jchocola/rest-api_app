@@ -46,6 +46,7 @@ dependencies:
   animated_rating_stars: ^1.0.1
   url_launcher: ^6.3.2
   flutter_secure_storage_x: ^11.3.0
+  get_it: ^9.0.5
 
 dev_dependencies:
   flutter_test:

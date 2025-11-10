@@ -33,9 +33,5 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
     _secureStorage = FlutterSecureStorage();
   }
 
-  // singleton
-  SecureStorageRepoImpl._privateContructor();
-  static final SecureStorageRepoImpl _instance =
-      SecureStorageRepoImpl._privateContructor();
-  static SecureStorageRepoImpl get instance => _instance;
+ 
 }
