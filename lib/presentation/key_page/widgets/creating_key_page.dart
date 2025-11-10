@@ -1,5 +1,6 @@
 import 'package:api_client/bloc/key_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
+import 'package:api_client/core/utils/key_input_formatter.dart';
 import 'package:api_client/data/model/key_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,6 +47,9 @@ class _CreatingKeyPageState extends State<CreatingKeyPage> {
         children: [
           Text('Add New Key'),
           ShadInput(
+            inputFormatters: [
+              KeyInputFormatter(),
+            ],
             controller: key_name_controller,
             placeholder: Text('KEY_NAME'),
             //keyboardType: TextInputType.emailAddress,
@@ -53,7 +57,7 @@ class _CreatingKeyPageState extends State<CreatingKeyPage> {
 
           ShadInput(
             controller: key_value_controller,
-            placeholder: Text('KEY_VALUE'),
+            placeholder: Text('GtGLlTLtc9Aw5jd....AC0wYvdX4NlnQj'),
             //keyboardType: TextInputType.emailAddress,
           ),
 
