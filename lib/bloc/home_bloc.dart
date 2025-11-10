@@ -1,4 +1,6 @@
 // ignore_for_file: dangling_library_doc_comments, camel_case_types
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:api_client/core/constant/app_constant.dart';
@@ -25,6 +27,11 @@ class HomeBlocEvent_ChangeHttpMethod extends HomeBlocEvent {
 class HomeBlocEvent_ChangeTabIndex extends HomeBlocEvent {
   final String tabIndex;
   HomeBlocEvent_ChangeTabIndex({required this.tabIndex});
+}
+
+class HomeBlocEvent_ChangeEndPointUrl extends HomeBlocEvent {
+  final String value;
+  HomeBlocEvent_ChangeEndPointUrl({required this.value});
 }
 
 ///
@@ -121,6 +128,31 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       final currentState = state;
       if (currentState is HomeBlocState_Loaded) {
         emit(currentState.copyWith(tabIndex: event.tabIndex));
+      }
+    });
+
+    ///
+    /// HOME BLOC EVENT - CHANGE HTTP METHOD
+    ///
+
+    on<HomeBlocEvent_ChangeHttpMethod>((event, emit) {
+      final currentState = state;
+
+      if (currentState is HomeBlocState_Loaded) {
+        emit(currentState.copyWith(currentMethod: event.method));
+      }
+
+      logger.i('Changed method : current method is ${event.method}');
+    });
+
+    ///
+    /// HOME BLOC EVENT - CHANGE ENDPOINT URL
+    ///
+    on<HomeBlocEvent_ChangeEndPointUrl>((event, emit) {
+      final currentState = state;
+      logger.i('Current endpoint value : ${event.value}');
+      if (currentState is HomeBlocState_Loaded) {
+        emit(currentState.copyWith(endpoint: event.value));
       }
     });
   }

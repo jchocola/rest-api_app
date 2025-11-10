@@ -141,8 +141,23 @@ class _HomePageState extends State<HomePage> {
                       (e) => ShadOption(value: e.name, child: Text(e.name)),
                     ),
                   ],
-                  selectedOptionBuilder: (context, value) => Text(value),
-                  onChanged: print,
+                  selectedOptionBuilder: (context, value) =>
+                      BlocBuilder<HomeBloc, HomeBlocState>(
+                        builder: (context, state) {
+                          if (state is HomeBlocState_Loaded) {
+                            return Text(state.currentMethod.name);
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                  onChanged: (value) {
+                    context.read<HomeBloc>().add(
+                      HomeBlocEvent_ChangeHttpMethod(
+                        method: httpMethodConvertFromString(value: value!),
+                      ),
+                    );
+                  },
                 ),
               ),
               // input fields
@@ -151,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                 flex: 3,
                 child: ShadInput(
                   controller: endpointController,
-                  // onChanged: (value) => ,
+                   onChanged: (value) => context.read<HomeBloc>().add(HomeBlocEvent_ChangeEndPointUrl(value: value)),
                   placeholder: Text('Endpoint URL'),
                   keyboardType: TextInputType.emailAddress,
                 ),
