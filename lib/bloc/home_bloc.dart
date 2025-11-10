@@ -1,0 +1,127 @@
+// ignore_for_file: dangling_library_doc_comments, camel_case_types
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:api_client/core/constant/app_constant.dart';
+import 'package:api_client/core/enum/http_method.dart';
+import 'package:api_client/data/model/parameter_model.dart';
+import 'package:api_client/main.dart';
+
+///
+/// HOME BLOC - USING FOR CONTROL HOME_PAGE STATE AND DATA FOR REQUEST
+///
+
+///
+/// EVENTS
+///
+abstract class HomeBlocEvent {}
+
+class HomeBlocEvent_Init extends HomeBlocEvent {}
+
+class HomeBlocEvent_ChangeHttpMethod extends HomeBlocEvent {
+  final HTTP_METHOD method;
+  HomeBlocEvent_ChangeHttpMethod({required this.method});
+}
+
+class HomeBlocEvent_ChangeTabIndex extends HomeBlocEvent {
+  final String tabIndex;
+  HomeBlocEvent_ChangeTabIndex({required this.tabIndex});
+}
+
+///
+/// STATES
+///
+abstract class HomeBlocState {}
+
+class HomeBlocState_Initial extends HomeBlocState {}
+
+class HomeBlocState_Loaded extends HomeBlocState {
+  // varaibles
+  final HTTP_METHOD currentMethod; // http method
+  final String endpoint; // url endpoint
+  final String tabIndex; // tab index (query-header-auth-body)
+  final String bodyTabIndex; // JSON - XML
+  final String bodyContent;
+
+  final List<ParameterModel> queryParameters; // query parameters
+  final List<ParameterModel> headerParameters; // header parameters
+
+  HomeBlocState_Loaded({
+    required this.currentMethod,
+    required this.endpoint,
+    required this.tabIndex,
+    required this.bodyContent,
+    required this.bodyTabIndex,
+    required this.headerParameters,
+    required this.queryParameters,
+  });
+
+  HomeBlocState_Loaded copyWith({
+    HTTP_METHOD? currentMethod,
+    String? endpoint,
+    String? tabIndex,
+    String? bodyTabIndex,
+    String? bodyContent,
+    List<ParameterModel>? queryParameters,
+    List<ParameterModel>? headerParameters,
+  }) {
+    return HomeBlocState_Loaded(
+      currentMethod: currentMethod ?? this.currentMethod,
+      endpoint: endpoint ?? this.endpoint,
+      tabIndex: tabIndex ?? this.tabIndex,
+      bodyTabIndex: bodyTabIndex ?? this.bodyTabIndex,
+      bodyContent: bodyContent ?? this.bodyContent,
+      queryParameters: queryParameters ?? this.queryParameters,
+      headerParameters: headerParameters ?? this.headerParameters,
+    );
+  }
+}
+
+class HomeBlocState_Loading extends HomeBlocState {}
+
+class HomeBlocState_Error extends HomeBlocState {
+  final String error;
+  HomeBlocState_Error({required this.error});
+}
+
+class HomeBlocState_Success extends HomeBlocState {
+  final String title;
+  HomeBlocState_Success({required this.title});
+}
+
+///
+/// HOME_BLOC
+///
+
+class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
+  HomeBloc() : super(HomeBlocState_Initial()) {
+    ///
+    /// HOME BLOC EVENT _ INIT
+    ///
+    on<HomeBlocEvent_Init>((event, emit) {
+      // SET DEFAULT DATA
+      emit(
+        HomeBlocState_Loaded(
+          currentMethod: HTTP_METHOD.GET,
+          endpoint: '',
+          tabIndex: AppConstant.tab_query,
+          bodyContent: '',
+          bodyTabIndex: AppConstant.tab_none,
+          headerParameters: [],
+          queryParameters: [],
+        ),
+      );
+
+      logger.i('Home Bloc inited');
+    });
+
+    ///
+    /// HOME BLOC EVENT - CHANGE TAB INDEX
+    ///
+    on<HomeBlocEvent_ChangeTabIndex>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        emit(currentState.copyWith(tabIndex: event.tabIndex));
+      }
+    });
+  }
+}

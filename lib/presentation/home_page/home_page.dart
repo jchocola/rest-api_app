@@ -1,5 +1,7 @@
+import 'package:api_client/bloc/home_bloc.dart';
 import 'package:api_client/bloc/key_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
+import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/presentation/drawer_page/drawer_page.dart';
@@ -15,13 +17,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-final fruits = {
-  'get': 'GET',
-  'post': 'POST',
-  'put': 'PUT',
-  'delete': 'DELETE',
-  'PATCH': 'PATCH',
-};
+// final fruits = {
+//   'get': 'GET',
+//   'post': 'POST',
+//   'put': 'PUT',
+//   'delete': 'DELETE',
+//   'PATCH': 'PATCH',
+// };
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,9 +33,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final ShadTabsController _tabsController = ShadTabsController<String>(
-  //   value: 'Query',
-  // );
+  final endpointController = TextEditingController();
 
   String selectedTab = 'Query';
 
@@ -47,28 +47,37 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    void _onKeyTapped(){
+    void _onKeyTapped() {
       showModalBottomSheet(
         showDragHandle: true,
-        context: context, builder: (context) {
-        return BlocBuilder<KeyBloc, KeyBlocState>(builder: (context,state){
-          if (state is KeyBlocLoaded) {
-            if (state.keys.isNotEmpty) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
-                child: Column(
-                  spacing: AppConstant.appPadding/2,
-                  children: List.generate(state.keys.length, (index)=> KeyCard(keyModel: state.keys[index])),
-                ),
-              );
-            } else {
-             return EmptyWidget();
-            }
-          } else {
-            return EmptyWidget();
-          }
-        });
-      });
+        context: context,
+        builder: (context) {
+          return BlocBuilder<KeyBloc, KeyBlocState>(
+            builder: (context, state) {
+              if (state is KeyBlocLoaded) {
+                if (state.keys.isNotEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppConstant.appPadding,
+                    ),
+                    child: Column(
+                      spacing: AppConstant.appPadding / 2,
+                      children: List.generate(
+                        state.keys.length,
+                        (index) => KeyCard(keyModel: state.keys[index]),
+                      ),
+                    ),
+                  );
+                } else {
+                  return EmptyWidget();
+                }
+              } else {
+                return EmptyWidget();
+              }
+            },
+          );
+        },
+      );
     }
 
     void _onHistoryPressed() {
@@ -92,11 +101,11 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(AppIcons.menuIcon),
           ),
           actions: [
-              /// KEY BUTTON
-              IconButton(
+            /// KEY BUTTON
+            IconButton(
               onPressed: () => _onKeyTapped(),
               icon: const Icon(AppIcons.keyIcon),
-            ), 
+            ),
 
             /// HISTORY BUTTON
             IconButton(
@@ -128,16 +137,11 @@ class _HomePageState extends State<HomePage> {
                 child: ShadSelect<String>(
                   placeholder: const Text('POST'),
                   options: [
-                    // Padding(
-                    //   padding: const EdgeInsets.fromLTRB(32, 6, 6, 6),
-                    //   child: Text('Methods', textAlign: TextAlign.start),
-                    // ),
-                    ...fruits.entries.map(
-                      (e) => ShadOption(value: e.key, child: Text(e.value)),
+                    ...HTTP_METHOD.values.map(
+                      (e) => ShadOption(value: e.name, child: Text(e.name)),
                     ),
                   ],
-                  selectedOptionBuilder: (context, value) =>
-                      Text(fruits[value]!),
+                  selectedOptionBuilder: (context, value) => Text(value),
                   onChanged: print,
                 ),
               ),
@@ -146,7 +150,9 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 flex: 3,
                 child: ShadInput(
-                  placeholder: Text('URL'),
+                  controller: endpointController,
+                  // onChanged: (value) => ,
+                  placeholder: Text('Endpoint URL'),
                   keyboardType: TextInputType.emailAddress,
                 ),
               ),
@@ -158,34 +164,42 @@ class _HomePageState extends State<HomePage> {
           ///
           ///
           // rest of the body content
-          ShadTabs(
-            //  controller: _tabsController,
-            scrollable: true,
-            onChanged: (value) {
-              setState(() {
-                selectedTab = value;
-              });
-              logger.i('Selected tab: $value');
+          BlocBuilder<HomeBloc, HomeBlocState>(
+            builder: (context, state) {
+              if (state is HomeBlocState_Loaded) {
+                return ShadTabs(
+                  //  controller: _tabsController,
+                  scrollable: true,
+                  onChanged: (value) {
+                    context.read<HomeBloc>().add(
+                      HomeBlocEvent_ChangeTabIndex(tabIndex: value),
+                    );
+                    logger.i('Selected tab: $value');
+                  },
+                  value: state.tabIndex,
+                  tabs: [
+                    ShadTab(
+                      value: AppConstant.tab_query,
+                      child: Center(child: Text('Query')),
+                    ),
+                    ShadTab(
+                      value: AppConstant.tab_headers,
+                      child: Center(child: Text('Headers')),
+                    ),
+                    ShadTab(
+                      value: AppConstant.tab_auth,
+                      child: Center(child: Text('Auth')),
+                    ),
+                    ShadTab(
+                      value: AppConstant.tab_body,
+                      child: Center(child: Text('Body')),
+                    ),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
             },
-            value: selectedTab,
-            tabs: [
-              ShadTab(
-                value: 'Query',
-                child: Center(child: Text('Query')),
-              ),
-              ShadTab(
-                value: 'Headers',
-                child: Center(child: Text('Headers')),
-              ),
-              ShadTab(
-                value: 'Auth',
-                child: Center(child: Text('Auth')),
-              ),
-              ShadTab(
-                value: 'Body',
-                child: Center(child: Text('Body')),
-              ),
-            ],
           ),
 
           const SizedBox(height: AppConstant.appPadding),
@@ -206,17 +220,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildContent(BuildContext context) {
-    switch (selectedTab) {
-      case 'Query':
-        return const QueryParametersWidget();
-      case 'Headers':
-        return const HeaderParameterWidget();
-      case 'Auth':
-        return const AuthParametersWidget();
-      case 'Body':
-        return const BodyParametersWidget();
-      default:
-        return const Center(child: Text('Select a tab'));
-    }
+    return BlocBuilder<HomeBloc, HomeBlocState>(
+      builder: (context, state) {
+        if (state is HomeBlocState_Loaded) {
+          switch (state.tabIndex) {
+            case AppConstant.tab_query:
+              return const QueryParametersWidget();
+            case AppConstant.tab_headers:
+              return const HeaderParameterWidget();
+            case AppConstant.tab_auth:
+              return const AuthParametersWidget();
+            case AppConstant.tab_body:
+              return const BodyParametersWidget();
+            default:
+              return const Center(child: Text('Select a tab'));
+          }
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 }
