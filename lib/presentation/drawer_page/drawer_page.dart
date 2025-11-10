@@ -37,6 +37,14 @@ class DrawerPage extends StatelessWidget {
     }
   }
 
+   Future<void> _privacyPolicyTapped() async {
+    final _url =
+        'https://www.freeprivacypolicy.com/live/dabf278f-55e1-4341-a916-87c5a526b162';
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
@@ -83,6 +91,7 @@ class DrawerPage extends StatelessWidget {
               ShadButton.ghost(
                 leading: Icon(AppIcons.privacyIcon),
                 child: Text('Privacy policy'),
+                onPressed: _privacyPolicyTapped,
               ),
 
               ShadButton.ghost(
