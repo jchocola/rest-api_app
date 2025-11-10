@@ -30,15 +30,15 @@ class KeyCard extends StatelessWidget {
       endActionPane: ActionPane(
         motion: ScrollMotion(),
         children: [
-          SlidableAction(
-            // An action can be bigger than the others.
-            // flex: 2,
-            onPressed: (context) {},
-            // backgroundColor: Color(0xFF7BC043),
-            // foregroundColor: Colors.white,
-            icon: AppIcons.editIcon,
-            label: 'Edit',
-          ),
+          // SlidableAction(
+          //   // An action can be bigger than the others.
+          //   // flex: 2,
+          //   onPressed: (context) {},
+          //   // backgroundColor: Color(0xFF7BC043),
+          //   // foregroundColor: Colors.white,
+          //   icon: AppIcons.editIcon,
+          //   label: 'Edit',
+          // ),
           SlidableAction(
             onPressed: (context) {
               _onDeleteTapped();

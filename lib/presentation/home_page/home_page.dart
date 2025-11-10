@@ -1,3 +1,4 @@
+import 'package:api_client/bloc/key_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/main.dart';
@@ -8,7 +9,10 @@ import 'package:api_client/presentation/home_page/widgets/body_parameters_widget
 import 'package:api_client/presentation/home_page/widgets/header_parameters_widget.dart';
 import 'package:api_client/presentation/home_page/widgets/query_parameters_widget.dart';
 import 'package:api_client/widgets/app_bar.dart';
+import 'package:api_client/widgets/empty_widget.dart';
+import 'package:api_client/widgets/key_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 final fruits = {
@@ -43,6 +47,30 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    void _onKeyTapped(){
+      showModalBottomSheet(
+        showDragHandle: true,
+        context: context, builder: (context) {
+        return BlocBuilder<KeyBloc, KeyBlocState>(builder: (context,state){
+          if (state is KeyBlocLoaded) {
+            if (state.keys.isNotEmpty) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
+                child: Column(
+                  spacing: AppConstant.appPadding/2,
+                  children: List.generate(state.keys.length, (index)=> KeyCard(keyModel: state.keys[index])),
+                ),
+              );
+            } else {
+             return EmptyWidget();
+            }
+          } else {
+            return EmptyWidget();
+          }
+        });
+      });
+    }
+
     void _onHistoryPressed() {
       showShadSheet(
         side: ShadSheetSide.right,
@@ -64,6 +92,13 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(AppIcons.menuIcon),
           ),
           actions: [
+              /// KEY BUTTON
+              IconButton(
+              onPressed: () => _onKeyTapped(),
+              icon: const Icon(AppIcons.keyIcon),
+            ), 
+
+            /// HISTORY BUTTON
             IconButton(
               onPressed: () => _onHistoryPressed(),
               icon: const Icon(AppIcons.historyIcon),
