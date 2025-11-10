@@ -17,6 +17,7 @@ class AppIcons {
   static const IconData copyIcon = Iconsax.copy;
 
   static const IconData deleteIcon = Icons.delete;
+  static const IconData deleteIcon2 = Icons.delete_outline_outlined;
   static const IconData editIcon = Icons.edit;
 
   static const IconData addIcon = Icons.add;

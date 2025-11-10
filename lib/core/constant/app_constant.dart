@@ -4,4 +4,6 @@ class AppConstant {
   static const double appPadding = 10.0;
 
   static const double appbarHeight = 50;
+
+  static const String emptyImageUrl = 'assets/empty.png';
 }
