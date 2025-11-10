@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({super.key, required this.side});
@@ -25,6 +26,14 @@ class DrawerPage extends StatelessWidget {
       }
     } catch (e) {
       logger.e(e);
+    }
+  }
+
+  Future<void> _rateUsTapped() async {
+    final _url =
+        'https://play.google.com/store/apps/dev?id=6563729752241674835';
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
     }
   }
 
@@ -62,6 +71,7 @@ class DrawerPage extends StatelessWidget {
               ShadButton.ghost(
                 leading: Icon(AppIcons.rateUsIcon),
                 child: Text('Rate us'),
+                onPressed: () => _rateUsTapped(),
               ),
 
               ShadButton.ghost(
@@ -97,9 +107,9 @@ class DrawerPage extends StatelessWidget {
                 child: Text('About Us'),
                 onPressed: () {
                   showShadDialog(
-                      context: context,
-                      builder: (context) => AboutUsPage(),
-                    );
+                    context: context,
+                    builder: (context) => AboutUsPage(),
+                  );
                 },
               ),
             ],
