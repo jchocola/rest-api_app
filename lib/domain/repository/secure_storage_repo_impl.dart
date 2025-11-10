@@ -16,9 +16,12 @@ class SecureStorageRepoImpl implements SecureStorageRepository {
   }
 
   @override
-  Future<void> deleteAllKeys() {
-    // TODO: implement deleteAllKeys
-    throw UnimplementedError();
+  Future<void> deleteAllKeys() async {
+    try {
+      await _secureStorage.deleteAll();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override

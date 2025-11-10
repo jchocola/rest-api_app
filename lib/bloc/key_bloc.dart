@@ -26,6 +26,9 @@ class KeyBlocEvent_deleteKey extends KeyBlocEvent {
   KeyBlocEvent_deleteKey({required this.key});
 }
 
+class KeyBlocEvent_deleteAllKeys extends KeyBlocEvent { 
+}
+
 ///
 /// STATE
 ///
@@ -102,6 +105,27 @@ class KeyBloc extends Bloc<KeyBlocEvent, KeyBlocState> {
         // save new key
         await secureRepository.deleteKey(key: event.key).then((value) {
           emit(KeyBlocSuccess(title: 'Deleted key')); 
+        });
+
+        // reload key list
+        add(KeyBlocEvent_loadKeys());
+      } catch (e) {
+        emit(KeyBlocError(eror: e.toString()));
+        logger.e(e);
+      }
+    });
+
+
+    ///
+    /// KEY BLOC EVENT _ delete all keys
+    ///
+    on<KeyBlocEvent_deleteAllKeys>((event, emit) async {
+      try {
+        emit(KeyBlocLoading());
+
+        // save new key
+        await secureRepository.deleteAllKeys().then((value) {
+          emit(KeyBlocSuccess(title: 'Deleted all  keys')); 
         });
 
         // reload key list
