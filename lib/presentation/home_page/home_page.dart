@@ -50,26 +50,29 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return Scaffold(
-      ///
-      /// APP BAR
-      ///
-      appBar: MyAppBar(
-        title: 'REST API Client',
-        leading: IconButton(
-          onPressed: () => _onMenuPressed(),
-          icon: const Icon(AppIcons.menuIcon),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => _onHistoryPressed(),
-            icon: const Icon(AppIcons.historyIcon),
+    return GestureDetector(
+      onTap: ()=> FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        ///
+        /// APP BAR
+        ///
+        appBar: MyAppBar(
+          title: 'REST API Client',
+          leading: IconButton(
+            onPressed: () => _onMenuPressed(),
+            icon: const Icon(AppIcons.menuIcon),
           ),
-        ],
+          actions: [
+            IconButton(
+              onPressed: () => _onHistoryPressed(),
+              icon: const Icon(AppIcons.historyIcon),
+            ),
+          ],
+        ),
+      
+        /// BODY
+        body: _buildBody(context),
       ),
-
-      /// BODY
-      body: _buildBody(context),
     );
   }
 
