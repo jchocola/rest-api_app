@@ -5,13 +5,13 @@ abstract class SecureStorageRepository {
   Future<void> init();
 
   // CREATE VALUE
-  Future<void> createKey();
+  Future<void> createKey({required KeyModel newKey});
 
   // GET ALL KEYS
   Future<List<KeyModel>> getAllKeys();
 
   // DELETE KEY
-  Future<void> deleteKey();
+  Future<void> deleteKey({required KeyModel key});
 
   // DELETE ALL KEYS
   Future<void> deleteAllKeys();

@@ -1,13 +1,20 @@
+import 'package:api_client/bloc/key_bloc.dart';
 import 'package:api_client/core/icons/app_icon.dart';
+import 'package:api_client/data/model/key_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class KeyCard extends StatelessWidget {
-  const KeyCard({super.key ,});
-
+  const KeyCard({super.key, required this.keyModel});
+  final KeyModel keyModel;
   @override
   Widget build(BuildContext context) {
+    void _onDeleteTapped() {
+      context.read<KeyBloc>().add(KeyBlocEvent_deleteKey(key: keyModel));
+    }
+
     return Slidable(
       endActionPane: ActionPane(
         motion: ScrollMotion(),
@@ -22,7 +29,9 @@ class KeyCard extends StatelessWidget {
             label: 'Edit',
           ),
           SlidableAction(
-            onPressed: (context) {},
+            onPressed: (context) {
+              _onDeleteTapped();
+            },
             //backgroundColor: Color(0xFF0392CF),
             // foregroundColor: Colors.white,
             icon: AppIcons.deleteIcon,
@@ -32,10 +41,10 @@ class KeyCard extends StatelessWidget {
       ),
       child: ShadCard(
         width: double.infinity,
-        title: Text('GEMINI_KEY'),
+        title: Text(keyModel.name),
         trailing: ShadButton.ghost(child: Icon(AppIcons.copyIcon)),
 
-        child: Text('8594-5893-8593-3923'),
+        child: Text(keyModel.value),
       ),
     );
   }

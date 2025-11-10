@@ -47,6 +47,7 @@ dependencies:
   url_launcher: ^6.3.2
   flutter_secure_storage_x: ^11.3.0
   get_it: ^9.0.5
+  elegant_notification: ^2.5.1
 
 dev_dependencies:
   flutter_test:
