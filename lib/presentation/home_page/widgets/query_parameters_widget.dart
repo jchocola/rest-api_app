@@ -34,8 +34,25 @@ class QueryParametersWidget extends StatelessWidget {
                   state.queryParameters.length,
                   (index) => ParameterCard(
                     parameter: state.queryParameters[index],
+                    onParameterNameChanged: (value) {
+                      context.read<HomeBloc>().add(
+                        HomeBlocEvent_change_query_parameter_name(
+                          queryParamIndex: index,
+                          parameterName: value,
+                        ),
+                      );
+                    },
+
+                    onParameterValueChanged: (value) {
+                      context.read<HomeBloc>().add(
+                        HomeBlocEvent_change_query_parameter_value(
+                          queryParamIndex: index,
+                          parameterValue: value,
+                        ),
+                      );
+                    },
                     onCheckBoxChanged: (value) => context.read<HomeBloc>().add(
-                      HomeBlocEvent_change_checkbox_value(
+                      HomeBlocEvent_change_query_checkbox_value(
                         queryParamIndex: index,
                       ),
                     ),

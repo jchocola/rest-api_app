@@ -4,20 +4,45 @@ import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class ParameterCard extends StatelessWidget {
-   ParameterCard({super.key , this.parameter, this.onCheckBoxChanged});
+  ParameterCard({
+    super.key,
+    this.parameter,
+    this.onCheckBoxChanged,
+    this.onParameterNameChanged,
+    this.onParameterValueChanged,
+  });
   final ParameterModel? parameter;
   void Function(bool)? onCheckBoxChanged;
+  void Function(String)? onParameterNameChanged;
+  void Function(String)? onParameterValueChanged;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppConstant.appPadding / 2),
       child: Row(
         children: [
-          ShadCheckbox(value: parameter?.isSelected  ?? false , onChanged: onCheckBoxChanged,),
+          ShadCheckbox(
+            value: parameter?.isSelected ?? false,
+            onChanged: onCheckBoxChanged,
+          ),
           const SizedBox(width: AppConstant.appPadding),
-          Expanded(flex: 1, child: ShadInput(placeholder: Text('Parameter'))),
+          Expanded(
+            flex: 1,
+            child: ShadInput(
+             
+              placeholder: parameter!.parameter.isEmpty ? Text('Parameter') : Text(parameter!.parameter),
+              onChanged: onParameterNameChanged,
+            ),
+          ),
           const SizedBox(width: AppConstant.appPadding),
-          Expanded(flex: 2, child: ShadInput(placeholder: Text('Value'))),
+          Expanded(
+            flex: 2,
+            child: ShadInput(
+              placeholder: parameter!.parameter.isEmpty ?  Text('Value') : Text(parameter!.value),
+              onChanged: onParameterValueChanged,
+            ),
+          ),
         ],
       ),
     );

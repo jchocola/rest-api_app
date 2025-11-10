@@ -36,9 +36,27 @@ class HomeBlocEvent_ChangeEndPointUrl extends HomeBlocEvent {
 
 class HomeBlocEvent_add_new_query_parameter extends HomeBlocEvent {}
 
-class HomeBlocEvent_change_checkbox_value extends HomeBlocEvent {
+class HomeBlocEvent_change_query_checkbox_value extends HomeBlocEvent {
   final int queryParamIndex;
-  HomeBlocEvent_change_checkbox_value({required this.queryParamIndex});
+  HomeBlocEvent_change_query_checkbox_value({required this.queryParamIndex});
+}
+
+class HomeBlocEvent_change_query_parameter_name extends HomeBlocEvent {
+  final int queryParamIndex;
+  final String parameterName;
+  HomeBlocEvent_change_query_parameter_name({
+    required this.queryParamIndex,
+    required this.parameterName,
+  });
+}
+
+class HomeBlocEvent_change_query_parameter_value extends HomeBlocEvent {
+  final int queryParamIndex;
+  final String parameterValue;
+  HomeBlocEvent_change_query_parameter_value({
+    required this.queryParamIndex,
+    required this.parameterValue,
+  });
 }
 
 ///
@@ -183,7 +201,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
     ///
     /// HOME BLOC EVENT - CHANGE CHECK BOX VALUE
     ///
-    on<HomeBlocEvent_change_checkbox_value>((event, emit) {
+    on<HomeBlocEvent_change_query_checkbox_value>((event, emit) {
       final currentState = state;
 
       logger.i('Changed checkbox value - index : ${event.queryParamIndex}');
@@ -192,6 +210,50 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
 
         final updated = queryParams[event.queryParamIndex].copyWith(
           isSelected: !queryParams[event.queryParamIndex].isSelected,
+        );
+
+        queryParams[event.queryParamIndex] = updated;
+
+        emit(currentState.copyWith(queryParameters: queryParams));
+      }
+    });
+
+    ///
+    /// HOME BLOC EVENT - CHANGE QUERY PARAMETER NAME
+    ///
+    on<HomeBlocEvent_change_query_parameter_name>((event, emit) {
+      final currentState = state;
+
+      logger.i(
+        'Changed parameter name - index : ${event.queryParamIndex} - ${event.parameterName}',
+      );
+      if (currentState is HomeBlocState_Loaded) {
+        final queryParams = currentState.queryParameters;
+
+        final updated = queryParams[event.queryParamIndex].copyWith(
+          parameter: event.parameterName,
+        );
+
+        queryParams[event.queryParamIndex] = updated;
+
+        emit(currentState.copyWith(queryParameters: queryParams));
+      }
+    });
+
+    ///
+    /// HOME BLOC EVENT - CHANGE QUERY PARAMETER NAME
+    ///
+    on<HomeBlocEvent_change_query_parameter_value>((event, emit) {
+      final currentState = state;
+
+      logger.i(
+        'Changed parameter value - index : ${event.queryParamIndex} - ${event.parameterValue}',
+      );
+      if (currentState is HomeBlocState_Loaded) {
+        final queryParams = currentState.queryParameters;
+
+        final updated = queryParams[event.queryParamIndex].copyWith(
+          value: event.parameterValue,
         );
 
         queryParams[event.queryParamIndex] = updated;
