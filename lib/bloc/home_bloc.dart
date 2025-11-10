@@ -34,6 +34,13 @@ class HomeBlocEvent_ChangeEndPointUrl extends HomeBlocEvent {
   HomeBlocEvent_ChangeEndPointUrl({required this.value});
 }
 
+class HomeBlocEvent_add_new_query_parameter extends HomeBlocEvent {}
+
+class HomeBlocEvent_change_checkbox_value extends HomeBlocEvent {
+  final int queryParamIndex;
+  HomeBlocEvent_change_checkbox_value({required this.queryParamIndex});
+}
+
 ///
 /// STATES
 ///
@@ -153,6 +160,43 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       logger.i('Current endpoint value : ${event.value}');
       if (currentState is HomeBlocState_Loaded) {
         emit(currentState.copyWith(endpoint: event.value));
+      }
+    });
+
+    ///
+    /// HOME BLOC EVENT - ADD NEW QUERY PARAMETER Tapped
+    ///
+    on<HomeBlocEvent_add_new_query_parameter>((event, emit) {
+      final currentState = state;
+
+      logger.i('Added new query parameter');
+      if (currentState is HomeBlocState_Loaded) {
+        final queryParams = currentState.queryParameters;
+        queryParams.add(
+          ParameterModel(isSelected: false, parameter: '', value: ''),
+        );
+
+        emit(currentState.copyWith(queryParameters: queryParams));
+      }
+    });
+
+    ///
+    /// HOME BLOC EVENT - CHANGE CHECK BOX VALUE
+    ///
+    on<HomeBlocEvent_change_checkbox_value>((event, emit) {
+      final currentState = state;
+
+      logger.i('Changed checkbox value - index : ${event.queryParamIndex}');
+      if (currentState is HomeBlocState_Loaded) {
+        final queryParams = currentState.queryParameters;
+
+        final updated = queryParams[event.queryParamIndex].copyWith(
+          isSelected: !queryParams[event.queryParamIndex].isSelected,
+        );
+
+        queryParams[event.queryParamIndex] = updated;
+
+        emit(currentState.copyWith(queryParameters: queryParams));
       }
     });
   }

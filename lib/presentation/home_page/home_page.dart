@@ -35,7 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final endpointController = TextEditingController();
 
-  String selectedTab = 'Query';
+ // String selectedTab = 'Query';
 
   @override
   Widget build(BuildContext context) {
