@@ -2,6 +2,7 @@ import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/presentation/faq_page/faq_page.dart';
+import 'package:api_client/presentation/feed_back_page/feedback_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -26,72 +27,79 @@ class DrawerPage extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = ShadTheme.of(context);
-    final size = MediaQuery.sizeOf(context);
-    return SizedBox(
-      width: size.width * AppConstant.drawerWidthFactor,
-      child: ShadSheet(
-        // constraints: BoxConstraints(
-        //   maxWidth: size.width * AppConstant.drawerWidthFactor,
-        // ),
-        title: const Text('REST API Client'),
+    @override
+    Widget build(BuildContext context) {
+      final theme = ShadTheme.of(context);
+      final size = MediaQuery.sizeOf(context);
+      return SizedBox(
+        width: size.width * AppConstant.drawerWidthFactor,
+        child: ShadSheet(
+          // constraints: BoxConstraints(
+          //   maxWidth: size.width * AppConstant.drawerWidthFactor,
+          // ),
+          title: const Text('REST API Client'),
 
-        // description: const Text(
-        //   "Make changes to your profile here. Click save when you're done",
-        // ),
+          // description: const Text(
+          //   "Make changes to your profile here. Click save when you're done",
+          // ),
 
-        // actions: const [ShadButton(child: Text('Save changes'))],
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // actions: const [ShadButton(child: Text('Save changes'))],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
-            spacing: 16,
-            children: [
-              ShadButton.ghost(
-                leading: Icon(AppIcons.keyIcon),
-                child: Text('Keys'),
-                onPressed: () => context.push('/keys'),
-              ),
+              spacing: 16,
+              children: [
+                ShadButton.ghost(
+                  leading: Icon(AppIcons.keyIcon),
+                  child: Text('Keys'),
+                  onPressed: () => context.push('/keys'),
+                ),
 
-              ShadButton.ghost(
-                leading: Icon(AppIcons.rateUsIcon),
-                child: Text('Rate us'),
-              ),
+                ShadButton.ghost(
+                  leading: Icon(AppIcons.rateUsIcon),
+                  child: Text('Rate us'),
+                ),
 
-              ShadButton.ghost(
-                leading: Icon(AppIcons.shareIcon),
-                child: Text('Share app'),
-                onPressed: _onShareAppTapped,
-              ),
+                ShadButton.ghost(
+                  leading: Icon(AppIcons.shareIcon),
+                  child: Text('Share app'),
+                  onPressed: _onShareAppTapped,
+                ),
 
-              ShadButton.ghost(
-                leading: Icon(AppIcons.privacyIcon),
-                child: Text('Privacy policy'),
-              ),
+                ShadButton.ghost(
+                  leading: Icon(AppIcons.privacyIcon),
+                  child: Text('Privacy policy'),
+                ),
 
-              ShadButton.ghost(
-                leading: Icon(AppIcons.faqsIcon),
-                onPressed: ()=> context.push('/faq'),
-                child: Text('FAQs'),
-              ),
+                ShadButton.ghost(
+                  leading: Icon(AppIcons.faqsIcon),
+                  onPressed: () => context.push('/faq'),
+                  child: Text('FAQs'),
+                ),
 
-              ShadButton.ghost(
-                leading: Icon(AppIcons.feedbackIcon),
-                child: Text('Feedback'),
-              ),
+                ShadButton.ghost(
+                  leading: Icon(AppIcons.feedbackIcon),
+                  child: Text('Feedback'),
+                  onPressed: () {
+                    showShadDialog(
+                      context: context,
+                      builder: (context) => FeedbackPage(),
+                    );
+                  },
+                ),
 
-              ShadButton.ghost(
-                leading: Icon(AppIcons.aboutUsIcon),
-                child: Text('About Us'),
-              ),
-            ],
+                ShadButton.ghost(
+                  leading: Icon(AppIcons.aboutUsIcon),
+                  child: Text('About Us'),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
+

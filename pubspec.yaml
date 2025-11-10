@@ -43,6 +43,7 @@ dependencies:
   interactive_json_preview: ^0.1.0
   flutter_slidable: ^4.0.3
   share_plus: ^12.0.1
+  animated_rating_stars: ^1.0.1
 
 dev_dependencies:
   flutter_test:
