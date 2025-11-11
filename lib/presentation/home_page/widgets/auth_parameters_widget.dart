@@ -88,20 +88,48 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
     );
   }
 
-  Widget _basic(context) {
+  Widget _basic(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppConstant.appPadding,
       children: [
         Text('Basic Authentication'),
         ShadInput(
-          placeholder: Text('Username'),
+          placeholder: BlocBuilder<HomeBloc, HomeBlocState>(
+            builder: (context, state) {
+              if (state is HomeBlocState_Loaded) {
+                return state.username == null
+                    ? Text('Username')
+                    : Text(state.username ?? '');
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          ),
           keyboardType: TextInputType.emailAddress,
+          onChanged: (value) {
+            context.read<HomeBloc>().add(
+              HomeBLocEvent_change_basic_auth_username(username: value),
+            );
+          },
         ),
 
         ShadInput(
-          placeholder: Text('Password'),
+          placeholder: BlocBuilder<HomeBloc, HomeBlocState>(
+            builder: (context, state) {
+              if (state is HomeBlocState_Loaded) {
+                return state.password == null ? Text('Password') : Text(state.password ?? '');
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          ),
           keyboardType: TextInputType.emailAddress,
+          onChanged: (value) {
+            context.read<HomeBloc>().add(
+              HomeBLocEvent_change_basic_auth_password(password: value),
+            );
+          },
         ),
       ],
     );

@@ -89,6 +89,17 @@ class HomeBlocEvent_change_auth_index extends HomeBlocEvent {
   HomeBlocEvent_change_auth_index({required this.authIndex});
 }
 
+class HomeBLocEvent_change_basic_auth_username extends HomeBlocEvent {
+  final String username;
+  HomeBLocEvent_change_basic_auth_username({required this.username});
+}
+
+
+class HomeBLocEvent_change_basic_auth_password extends HomeBlocEvent {
+  final String password;
+  HomeBLocEvent_change_basic_auth_password({required this.password});
+}
+
 ///
 /// STATES
 ///
@@ -107,6 +118,8 @@ class HomeBlocState_Loaded extends HomeBlocState {
 
   final List<ParameterModel> queryParameters; // query parameters
   final List<ParameterModel> headerParameters; // header parameters
+  final String? username; // auth basic user name
+  final String? password; // auth basic password
 
   HomeBlocState_Loaded({
     required this.currentMethod,
@@ -116,7 +129,9 @@ class HomeBlocState_Loaded extends HomeBlocState {
     required this.bodyTabIndex,
     required this.headerParameters,
     required this.queryParameters,
-    required this.authTabIndex
+    required this.authTabIndex,
+    this.username,
+    this.password,
   });
 
   HomeBlocState_Loaded copyWith({
@@ -128,6 +143,8 @@ class HomeBlocState_Loaded extends HomeBlocState {
     List<ParameterModel>? queryParameters,
     List<ParameterModel>? headerParameters,
     String? authTabIndex,
+    String? username,
+    String? password,
   }) {
     return HomeBlocState_Loaded(
       currentMethod: currentMethod ?? this.currentMethod,
@@ -137,7 +154,9 @@ class HomeBlocState_Loaded extends HomeBlocState {
       bodyContent: bodyContent ?? this.bodyContent,
       queryParameters: queryParameters ?? this.queryParameters,
       headerParameters: headerParameters ?? this.headerParameters,
-      authTabIndex: authTabIndex ?? this.authTabIndex
+      authTabIndex: authTabIndex ?? this.authTabIndex,
+      username: username ?? this.username,
+      password: password ?? this.password,
     );
   }
 }
@@ -174,7 +193,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
           bodyTabIndex: AppConstant.tab_none,
           headerParameters: [],
           queryParameters: [],
-          authTabIndex: AppConstant.tab_none
+          authTabIndex: AppConstant.tab_none,
         ),
       );
 
@@ -380,15 +399,37 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-
-
-     ///
+    ///
     /// HOME BLOC EVENT - CHANGE TAB INDEX
     ///
     on<HomeBlocEvent_change_auth_index>((event, emit) {
       final currentState = state;
       if (currentState is HomeBlocState_Loaded) {
         emit(currentState.copyWith(authTabIndex: event.authIndex));
+      }
+    });
+
+    ///
+    ///  HOME BLOC EVENT - CHANGE BASIC AUTH USER NAME
+    ///
+    on<HomeBLocEvent_change_basic_auth_username>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        logger.i('Change basic auth user name - ${event.username}');
+
+        emit(currentState.copyWith(username: event.username));
+      }
+    });
+
+     ///
+    ///  HOME BLOC EVENT - CHANGE BASIC AUTH USER NAME
+    ///
+    on<HomeBLocEvent_change_basic_auth_password>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        logger.i('Change basic auth password - ${event.password}');
+
+        emit(currentState.copyWith(password: event.password));
       }
     });
   }
