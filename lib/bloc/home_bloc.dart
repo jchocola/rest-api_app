@@ -1,6 +1,7 @@
 // ignore_for_file: dangling_library_doc_comments, camel_case_types
 import 'dart:math';
 
+import 'package:api_client/data/repository/http_service_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:api_client/core/constant/app_constant.dart';
@@ -144,7 +145,7 @@ class HomeBlocState_Initial extends HomeBlocState {}
 class HomeBlocState_Loaded extends HomeBlocState {
   // varaibles
   final HTTP_METHOD currentMethod; // http method
-  final String endpointMethod;  // endpoint method body 
+  final String endpointMethod; // endpoint method body
   final String endpoint; // url endpoint
   final String tabIndex; // tab index (query-header-auth-body)
   final String bodyTabIndex; // JSON - XML
@@ -237,7 +238,9 @@ class HomeBlocState_Success extends HomeBlocState {
 ///
 
 class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
-  HomeBloc() : super(HomeBlocState_Initial()) {
+  final HttpServiceRepository httServiceRepository;
+
+  HomeBloc({required this.httServiceRepository}) : super(HomeBlocState_Initial()) {
     ///
     /// HOME BLOC EVENT _ INIT
     ///
@@ -299,7 +302,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-       ///
+    ///
     /// HOME BLOC EVENT - CHANGE ENDPOINT URL
     ///
     on<HomeBlocEvent_ChangeEndPointMethodUrl>((event, emit) {
