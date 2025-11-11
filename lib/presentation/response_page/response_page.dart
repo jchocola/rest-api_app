@@ -33,9 +33,15 @@ class _ResponsePageState extends State<ResponsePage> {
           _buildTab(context),
           SizedBox(height: AppConstant.appPadding),
           Expanded(child: _buidContent(context)),
-          Align(
-            alignment: AlignmentGeometry.bottomRight,
-            child: ShadButton.secondary(child: Text('Re-use'))),
+          Row(
+            spacing: AppConstant.appPadding,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ShadButton.secondary(child: Text('Call again')),
+              ShadButton.secondary(child: Text('Re-use')),
+              ShadButton.secondary(child: Text('Delete')),
+            ],
+          ),
         ],
       ),
     );
@@ -78,10 +84,7 @@ class _ResponsePageState extends State<ResponsePage> {
           value: 'Headers',
           child: Center(child: Text('Headers')),
         ),
-        // ShadTab(
-        //   value: 'Auth',
-        //   child: Center(child: Text('Auth')),
-        // ),
+       
         ShadTab(
           value: 'Cookies',
           child: Center(child: Text('Cookies')),
