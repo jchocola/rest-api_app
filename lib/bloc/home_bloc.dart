@@ -59,6 +59,34 @@ class HomeBlocEvent_change_query_parameter_value extends HomeBlocEvent {
   });
 }
 
+
+class HomeBlocEvent_add_new_header_parameter extends HomeBlocEvent {}
+
+class HomeBlocEvent_change_header_checkbox_value extends HomeBlocEvent {
+  final int headerParamIndex;
+  HomeBlocEvent_change_header_checkbox_value({required this.headerParamIndex});
+}
+
+
+class HomeBlocEvent_change_header_parameter_name extends HomeBlocEvent {
+  final int headerParamIndex;
+  final String parameterName;
+  HomeBlocEvent_change_header_parameter_name({
+    required this.headerParamIndex,
+    required this.parameterName,
+  });
+}
+
+
+class HomeBlocEvent_change_header_parameter_value extends HomeBlocEvent {
+  final int headerParamIndex;
+  final String parameterValue;
+  HomeBlocEvent_change_header_parameter_value({
+    required this.headerParamIndex,
+    required this.parameterValue,
+  });
+}
+
 ///
 /// STATES
 ///
@@ -259,6 +287,93 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
         queryParams[event.queryParamIndex] = updated;
 
         emit(currentState.copyWith(queryParameters: queryParams));
+      }
+    });
+
+
+
+
+    ///
+    /// HOME BLOC EVENT - ADD NEW HEADER PARAMETER Tapped
+    ///
+    on<HomeBlocEvent_add_new_header_parameter>((event, emit) {
+      final currentState = state;
+
+      logger.i('Added new header parameter');
+      if (currentState is HomeBlocState_Loaded) {
+        final headerParams = currentState.headerParameters;
+        headerParams.add(
+          ParameterModel(isSelected: false, parameter: '', value: ''),
+        );
+
+        emit(currentState.copyWith(headerParameters: headerParams));
+      }
+    });
+
+
+     ///
+    /// HOME BLOC EVENT - CHANGE CHECK BOX VALUE
+    ///
+    on<HomeBlocEvent_change_header_checkbox_value>((event, emit) {
+      final currentState = state;
+
+      logger.i('Changed checkbox header value - index : ${event.headerParamIndex}');
+      if (currentState is HomeBlocState_Loaded) {
+        final headerParams = currentState.headerParameters;
+
+        final updated = headerParams[event.headerParamIndex].copyWith(
+          isSelected: !headerParams[event.headerParamIndex].isSelected,
+        );
+
+        headerParams[event.headerParamIndex] = updated;
+
+        emit(currentState.copyWith(headerParameters: headerParams));
+      }
+    });
+
+
+      ///
+    /// HOME BLOC EVENT - CHANGE HEADER PARAMETER NAME
+    ///
+    on<HomeBlocEvent_change_header_parameter_name>((event, emit) {
+      final currentState = state;
+
+      logger.i(
+        'Changed header parameter name - index : ${event.headerParamIndex} - ${event.parameterName}',
+      );
+      if (currentState is HomeBlocState_Loaded) {
+        final queryParams = currentState.headerParameters;
+
+        final updated = queryParams[event.headerParamIndex].copyWith(
+          parameter: event.parameterName,
+        );
+
+        queryParams[event.headerParamIndex] = updated;
+
+        emit(currentState.copyWith(headerParameters: queryParams));
+      }
+    });
+
+
+     ///
+    /// HOME BLOC EVENT - CHANGE HEADER PARAMETER VALUE
+    ///
+    on<HomeBlocEvent_change_header_parameter_value>((event, emit) {
+      final currentState = state;
+
+      logger.i(
+        'Changed HEADER parameter  value - index : ${event.headerParamIndex} - ${event.parameterValue}',
+      );
+      if (currentState is HomeBlocState_Loaded) {
+        final headerParams = currentState.headerParameters;
+
+        final updated = headerParams[event.headerParamIndex].copyWith(
+          value: event.parameterValue,
+        );
+
+        headerParams[event.headerParamIndex] = updated;
+
+        emit(currentState.copyWith(headerParameters: headerParams));
       }
     });
   }
