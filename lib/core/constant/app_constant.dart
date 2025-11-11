@@ -24,4 +24,9 @@ class AppConstant {
   // BODY INDEX VALUES
   static const String tab_json = 'json';
   static const String tab_xml = 'xml';
+
+  // RESPONSE INDEX VALUES
+  static const String tab_response = 'response';
+  static const String tab_cookies = 'cookies';
+  static const String tab_request_params = 'request_params';
 }

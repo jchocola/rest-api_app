@@ -77,17 +77,22 @@ class _ResponsePageState extends State<ResponsePage> {
       value: selectedTab,
       tabs: [
         ShadTab(
-          value: 'Response',
+          value: AppConstant.tab_response,
           child: Center(child: Text('Response')),
         ),
         ShadTab(
-          value: 'Headers',
+          value: AppConstant.tab_headers,
           child: Center(child: Text('Headers')),
         ),
        
         ShadTab(
-          value: 'Cookies',
+          value: AppConstant.tab_cookies,
           child: Center(child: Text('Cookies')),
+        ),
+
+         ShadTab(
+          value: AppConstant.tab_request_params,
+          child: Center(child: Text('Request Parameters')),
         ),
       ],
     );
@@ -95,12 +100,14 @@ class _ResponsePageState extends State<ResponsePage> {
 
   Widget _buidContent(context) {
     switch (selectedTab) {
-      case 'Response':
+      case AppConstant.tab_response:
         return ResponseViewerWidget();
-      case 'Headers':
+      case AppConstant.tab_headers:
         return HeaderViewerWidget();
-      case 'Cookies':
+      case AppConstant.tab_cookies:
         return ResponseViewerWidget();
+      case AppConstant.tab_request_params:
+        return ResponseViewerWidget();  
       default:
         return SizedBox();
     }
