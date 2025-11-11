@@ -73,29 +73,81 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
   Widget _basic(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppConstant.appPadding,
       children: [
         Text('Basic Authentication'),
-        ParameterCard(),
-        ParameterCard(),
+        ShadInput(
+          placeholder: Text('Username'),
+          keyboardType: TextInputType.emailAddress,
+        ),
+      
+        ShadInput(
+          placeholder: Text('Password'),
+          keyboardType: TextInputType.emailAddress,
+        ),
       ],
     );
   }
 
   Widget _bearer(context) {
     return Column(
+      spacing: AppConstant.appPadding,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [Text('Bearer Token'), ShadTextarea(), ParameterCard()],
+      children: [
+        Text('Bearer Token'),
+       ShadTextarea(
+        placeholder: Text('Enter token'),
+       ),
+
+        Row(
+          children: [
+            Text('Token prefix'),
+            SizedBox(width: AppConstant.appPadding/2,),
+            Flexible(
+              child: ShadInput(
+                initialValue: 'Bearer',
+                placeholder: Text('Bearer'),
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
-
 
   Widget _oauth2(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppConstant.appPadding,
       children: [
         Text('OAuth Authentication'),
-        ParameterCard(),
-        ParameterCard(),
+          Row(
+          children: [
+            Text('Token prefix'),
+            SizedBox(width: AppConstant.appPadding/2,),
+            Flexible(
+              child: ShadInput(
+                initialValue: 'Bearer',
+                placeholder: Text('Bearer'),
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ),
+          ],
+        ),
+           Row(
+          children: [
+            Text('Access token'),
+            SizedBox(width: AppConstant.appPadding/2,),
+            Flexible(
+              child: ShadInput(
+               // initialValue: '',
+                placeholder: Text('enter token'),
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
