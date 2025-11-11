@@ -20,4 +20,8 @@ class AppConstant {
   static const String tab_basic = 'basic';
   static const String tab_bearer = 'bearer';
   static const String tab_oauth2 = 'oauth2';
+
+  // BODY INDEX VALUES
+  static const String tab_json = 'json';
+  static const String tab_xml = 'xml';
 }

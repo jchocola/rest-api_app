@@ -119,6 +119,11 @@ class HomeBLocEvent_change_oauth2_access_token extends HomeBlocEvent {
   HomeBLocEvent_change_oauth2_access_token({required this.token});
 }
 
+class HomeBlocEvent_change_body_index extends HomeBlocEvent {
+  final String bodyIndex;
+  HomeBlocEvent_change_body_index({required this.bodyIndex});
+}
+
 ///
 /// STATES
 ///
@@ -230,14 +235,14 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
           endpoint: '',
           tabIndex: AppConstant.tab_query,
           bodyContent: '',
-          bodyTabIndex: AppConstant.tab_none,
+          bodyTabIndex: AppConstant.tab_json,
           headerParameters: [],
           queryParameters: [],
           authTabIndex: AppConstant.tab_none,
           username: null,
           password: null,
           bearerToken: null,
-          oauth2AccessToken: null
+          oauth2AccessToken: null,
         ),
       );
 
@@ -522,6 +527,18 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
         logger.i('Change oauth2 acces token - ${event.token}');
 
         emit(currentState.copyWith(oauth2AccessToken: event.token));
+      }
+    });
+
+    ///
+    /// HOME BLOC EVENT - CHANGE BODY INDEX
+    ///
+    on<HomeBlocEvent_change_body_index>((event, emit) {
+      final currentState = state;
+
+      logger.i('Change body tab : ${event.bodyIndex}');
+      if (currentState is HomeBlocState_Loaded) {
+        emit(currentState.copyWith(bodyTabIndex: event.bodyIndex));
       }
     });
   }
