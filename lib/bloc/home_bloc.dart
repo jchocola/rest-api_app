@@ -109,10 +109,14 @@ class HomeBLocEvent_change_bearer_auth_token_prefix extends HomeBlocEvent {
   HomeBLocEvent_change_bearer_auth_token_prefix({required this.tokenPrefix});
 }
 
+class HomeBLocEvent_change_oauth2_token_prefix extends HomeBlocEvent {
+  final String tokenPrefix;
+  HomeBLocEvent_change_oauth2_token_prefix({required this.tokenPrefix});
+}
 
-class HomeBLocEvent_change_oatuh2_access_token extends HomeBlocEvent {
+class HomeBLocEvent_change_oauth2_access_token extends HomeBlocEvent {
   final String token;
-  HomeBLocEvent_change_oatuh2_access_token({required this.token});
+  HomeBLocEvent_change_oauth2_access_token({required this.token});
 }
 
 ///
@@ -137,8 +141,11 @@ class HomeBlocState_Loaded extends HomeBlocState {
   final String? password; // auth basic password
 
   final String? bearerToken; // auth bearer token
-  final String? tokenPrefix; // auth bearer token prefix
-  final String? accessToken; // auth oauth2 access token 
+  final String? bearerTokenPrefix; // auth bearer token prefix
+
+  final String? oauth2AccessToken; // auth oauth2 access token
+  final String? oauth2TokenPrefix; // auth oatuh token prefix
+
   HomeBlocState_Loaded({
     required this.currentMethod,
     required this.endpoint,
@@ -151,8 +158,10 @@ class HomeBlocState_Loaded extends HomeBlocState {
     this.username,
     this.password,
     this.bearerToken,
-    this.tokenPrefix = 'Bearer',
-    this.accessToken
+    this.bearerTokenPrefix = 'Bearer',
+
+    this.oauth2TokenPrefix = 'Bearer',
+    this.oauth2AccessToken,
   });
 
   HomeBlocState_Loaded copyWith({
@@ -167,8 +176,10 @@ class HomeBlocState_Loaded extends HomeBlocState {
     String? username,
     String? password,
     String? bearerToken,
-    String? tokenPrefix,
-    String? accessToken,
+    String? bearerTokenPrefix,
+
+    String? oauth2TokenPrefix,
+    String? oauth2AccessToken,
   }) {
     return HomeBlocState_Loaded(
       currentMethod: currentMethod ?? this.currentMethod,
@@ -182,8 +193,10 @@ class HomeBlocState_Loaded extends HomeBlocState {
       username: username ?? this.username,
       password: password ?? this.password,
       bearerToken: bearerToken ?? this.bearerToken,
-      tokenPrefix: tokenPrefix ?? this.tokenPrefix,
-      accessToken: accessToken ?? this.accessToken
+      bearerTokenPrefix: bearerTokenPrefix ?? this.bearerTokenPrefix,
+
+      oauth2AccessToken: oauth2AccessToken ?? this.oauth2AccessToken,
+      oauth2TokenPrefix: oauth2TokenPrefix ?? this.oauth2TokenPrefix,
     );
   }
 }
@@ -221,6 +234,10 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
           headerParameters: [],
           queryParameters: [],
           authTabIndex: AppConstant.tab_none,
+          username: null,
+          password: null,
+          bearerToken: null,
+          oauth2AccessToken: null
         ),
       );
 
@@ -480,19 +497,31 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       if (currentState is HomeBlocState_Loaded) {
         logger.i('Change bearer auth token prefix - ${event.tokenPrefix}');
 
-        emit(currentState.copyWith(tokenPrefix: event.tokenPrefix));
+        emit(currentState.copyWith(bearerTokenPrefix: event.tokenPrefix));
       }
     });
 
-     ///
+    ///
+    ///  HOME BLOC EVENT - CHANGE BASIC AUTH USER NAME
+    ///
+    on<HomeBLocEvent_change_oauth2_token_prefix>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        logger.i('Change  oauth2 token prefix - ${event.tokenPrefix}');
+
+        emit(currentState.copyWith(oauth2TokenPrefix: event.tokenPrefix));
+      }
+    });
+
+    ///
     ///  HOME BLOC EVENT - CHANGE OAUTH2 ACCESS TOKEN
     ///
-    on<HomeBLocEvent_change_oatuh2_access_token>((event, emit) {
+    on<HomeBLocEvent_change_oauth2_access_token>((event, emit) {
       final currentState = state;
       if (currentState is HomeBlocState_Loaded) {
         logger.i('Change oauth2 acces token - ${event.token}');
 
-        emit(currentState.copyWith(accessToken: event.token));
+        emit(currentState.copyWith(oauth2AccessToken: event.token));
       }
     });
   }

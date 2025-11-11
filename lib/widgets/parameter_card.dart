@@ -30,8 +30,8 @@ class ParameterCard extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ShadInput(
-             
-              placeholder: parameter!.parameter.isEmpty ? Text('Parameter') : Text(parameter!.parameter),
+             initialValue: parameter?.parameter,
+              placeholder:  Text('Parameter'),
               onChanged: onParameterNameChanged,
             ),
           ),
@@ -39,7 +39,8 @@ class ParameterCard extends StatelessWidget {
           Expanded(
             flex: 2,
             child: ShadInput(
-              placeholder: parameter!.parameter.isEmpty ?  Text('Value') : Text(parameter!.value),
+              initialValue: parameter?.value,
+              placeholder:   Text('Value') ,
               onChanged: onParameterValueChanged,
             ),
           ),

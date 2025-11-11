@@ -168,7 +168,7 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
                 builder: (context, state) {
                   if (state is HomeBlocState_Loaded) {
                     return ShadInput(
-                      initialValue: state.tokenPrefix,
+                      initialValue: state.bearerTokenPrefix,
                       placeholder: Text('Bearer'),
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) => context.read<HomeBloc>()
@@ -205,12 +205,12 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
                 builder: (context, state) {
                   if (state is HomeBlocState_Loaded) {
                     return ShadInput(
-                      initialValue: state.bearerToken,
+                      initialValue: state.oauth2TokenPrefix,
                       placeholder: Text('Bearer'),
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) => context.read<HomeBloc>()
                         ..add(
-                          HomeBLocEvent_change_bearer_auth_token_prefix(
+                          HomeBLocEvent_change_oauth2_token_prefix(
                             tokenPrefix: value,
                           ),
                         ),
@@ -232,10 +232,12 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
                 builder: (context, state) {
                   if (state is HomeBlocState_Loaded) {
                     return ShadInput(
-                      initialValue: state.accessToken,
+                      initialValue: state.oauth2AccessToken,
                       placeholder: Text('Enter token'),
                       keyboardType: TextInputType.emailAddress,
-                      onChanged: (value)=> context.read<HomeBloc>().add(HomeBLocEvent_change_oatuh2_access_token(token: value)),
+                      onChanged: (value) => context.read<HomeBloc>().add(
+                        HomeBLocEvent_change_oauth2_access_token(token: value),
+                      ),
                     );
                   } else {
                     return CircularProgressIndicator();
