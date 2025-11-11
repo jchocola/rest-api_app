@@ -94,10 +94,25 @@ class HomeBLocEvent_change_basic_auth_username extends HomeBlocEvent {
   HomeBLocEvent_change_basic_auth_username({required this.username});
 }
 
-
 class HomeBLocEvent_change_basic_auth_password extends HomeBlocEvent {
   final String password;
   HomeBLocEvent_change_basic_auth_password({required this.password});
+}
+
+class HomeBLocEvent_change_bearer_auth_token extends HomeBlocEvent {
+  final String token;
+  HomeBLocEvent_change_bearer_auth_token({required this.token});
+}
+
+class HomeBLocEvent_change_bearer_auth_token_prefix extends HomeBlocEvent {
+  final String tokenPrefix;
+  HomeBLocEvent_change_bearer_auth_token_prefix({required this.tokenPrefix});
+}
+
+
+class HomeBLocEvent_change_oatuh2_access_token extends HomeBlocEvent {
+  final String token;
+  HomeBLocEvent_change_oatuh2_access_token({required this.token});
 }
 
 ///
@@ -121,6 +136,9 @@ class HomeBlocState_Loaded extends HomeBlocState {
   final String? username; // auth basic user name
   final String? password; // auth basic password
 
+  final String? bearerToken; // auth bearer token
+  final String? tokenPrefix; // auth bearer token prefix
+  final String? accessToken; // auth oauth2 access token 
   HomeBlocState_Loaded({
     required this.currentMethod,
     required this.endpoint,
@@ -132,6 +150,9 @@ class HomeBlocState_Loaded extends HomeBlocState {
     required this.authTabIndex,
     this.username,
     this.password,
+    this.bearerToken,
+    this.tokenPrefix = 'Bearer',
+    this.accessToken
   });
 
   HomeBlocState_Loaded copyWith({
@@ -145,6 +166,9 @@ class HomeBlocState_Loaded extends HomeBlocState {
     String? authTabIndex,
     String? username,
     String? password,
+    String? bearerToken,
+    String? tokenPrefix,
+    String? accessToken,
   }) {
     return HomeBlocState_Loaded(
       currentMethod: currentMethod ?? this.currentMethod,
@@ -157,6 +181,9 @@ class HomeBlocState_Loaded extends HomeBlocState {
       authTabIndex: authTabIndex ?? this.authTabIndex,
       username: username ?? this.username,
       password: password ?? this.password,
+      bearerToken: bearerToken ?? this.bearerToken,
+      tokenPrefix: tokenPrefix ?? this.tokenPrefix,
+      accessToken: accessToken ?? this.accessToken
     );
   }
 }
@@ -421,7 +448,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-     ///
+    ///
     ///  HOME BLOC EVENT - CHANGE BASIC AUTH USER NAME
     ///
     on<HomeBLocEvent_change_basic_auth_password>((event, emit) {
@@ -430,6 +457,42 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
         logger.i('Change basic auth password - ${event.password}');
 
         emit(currentState.copyWith(password: event.password));
+      }
+    });
+
+    ///
+    ///  HOME BLOC EVENT - CHANGE BASIC AUTH USER NAME
+    ///
+    on<HomeBLocEvent_change_bearer_auth_token>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        logger.i('Change bearer auth token - ${event.token}');
+
+        emit(currentState.copyWith(bearerToken: event.token));
+      }
+    });
+
+    ///
+    ///  HOME BLOC EVENT - CHANGE BASIC AUTH USER NAME
+    ///
+    on<HomeBLocEvent_change_bearer_auth_token_prefix>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        logger.i('Change bearer auth token prefix - ${event.tokenPrefix}');
+
+        emit(currentState.copyWith(tokenPrefix: event.tokenPrefix));
+      }
+    });
+
+     ///
+    ///  HOME BLOC EVENT - CHANGE OAUTH2 ACCESS TOKEN
+    ///
+    on<HomeBLocEvent_change_oatuh2_access_token>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        logger.i('Change oauth2 acces token - ${event.token}');
+
+        emit(currentState.copyWith(accessToken: event.token));
       }
     });
   }

@@ -94,64 +94,94 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
       spacing: AppConstant.appPadding,
       children: [
         Text('Basic Authentication'),
-        ShadInput(
-          placeholder: BlocBuilder<HomeBloc, HomeBlocState>(
-            builder: (context, state) {
-              if (state is HomeBlocState_Loaded) {
-                return state.username == null
-                    ? Text('Username')
-                    : Text(state.username ?? '');
-              } else {
-                return CircularProgressIndicator();
-              }
-            },
-          ),
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (value) {
-            context.read<HomeBloc>().add(
-              HomeBLocEvent_change_basic_auth_username(username: value),
-            );
+        BlocBuilder<HomeBloc, HomeBlocState>(
+          builder: (context, state) {
+            if (state is HomeBlocState_Loaded) {
+              return ShadInput(
+                initialValue: state.username,
+                placeholder: Text('Username'),
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (value) {
+                  context.read<HomeBloc>().add(
+                    HomeBLocEvent_change_basic_auth_username(username: value),
+                  );
+                },
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
           },
         ),
 
-        ShadInput(
-          placeholder: BlocBuilder<HomeBloc, HomeBlocState>(
-            builder: (context, state) {
-              if (state is HomeBlocState_Loaded) {
-                return state.password == null ? Text('Password') : Text(state.password ?? '');
-              } else {
-                return CircularProgressIndicator();
-              }
-            },
-          ),
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (value) {
-            context.read<HomeBloc>().add(
-              HomeBLocEvent_change_basic_auth_password(password: value),
-            );
+        BlocBuilder<HomeBloc, HomeBlocState>(
+          builder: (context, state) {
+            if (state is HomeBlocState_Loaded) {
+              return ShadInput(
+                initialValue: state.password,
+                placeholder: Text('Password'),
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (value) {
+                  context.read<HomeBloc>().add(
+                    HomeBLocEvent_change_basic_auth_password(password: value),
+                  );
+                },
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
           },
         ),
       ],
     );
   }
 
-  Widget _bearer(context) {
+  Widget _bearer(BuildContext context) {
     return Column(
       spacing: AppConstant.appPadding,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Bearer Token'),
-        ShadTextarea(placeholder: Text('Enter token')),
+        BlocBuilder<HomeBloc, HomeBlocState>(
+          builder: (context, state) {
+            if (state is HomeBlocState_Loaded) {
+              return ShadTextarea(
+                initialValue: state.bearerToken,
+                placeholder: Text('Enter token'),
+                onChanged: (value) {
+                  context.read<HomeBloc>().add(
+                    HomeBLocEvent_change_bearer_auth_token(token: value),
+                  );
+                },
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ),
 
         Row(
           children: [
             Text('Token prefix'),
             SizedBox(width: AppConstant.appPadding / 2),
             Flexible(
-              child: ShadInput(
-                initialValue: 'Bearer',
-                placeholder: Text('Bearer'),
-                keyboardType: TextInputType.emailAddress,
+              child: BlocBuilder<HomeBloc, HomeBlocState>(
+                builder: (context, state) {
+                  if (state is HomeBlocState_Loaded) {
+                    return ShadInput(
+                      initialValue: state.tokenPrefix,
+                      placeholder: Text('Bearer'),
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) => context.read<HomeBloc>()
+                        ..add(
+                          HomeBLocEvent_change_bearer_auth_token_prefix(
+                            tokenPrefix: value,
+                          ),
+                        ),
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               ),
             ),
           ],
@@ -171,10 +201,24 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
             Text('Token prefix'),
             SizedBox(width: AppConstant.appPadding / 2),
             Flexible(
-              child: ShadInput(
-                initialValue: 'Bearer',
-                placeholder: Text('Bearer'),
-                keyboardType: TextInputType.emailAddress,
+              child: BlocBuilder<HomeBloc, HomeBlocState>(
+                builder: (context, state) {
+                  if (state is HomeBlocState_Loaded) {
+                    return ShadInput(
+                      initialValue: state.bearerToken,
+                      placeholder: Text('Bearer'),
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) => context.read<HomeBloc>()
+                        ..add(
+                          HomeBLocEvent_change_bearer_auth_token_prefix(
+                            tokenPrefix: value,
+                          ),
+                        ),
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               ),
             ),
           ],
@@ -184,10 +228,19 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
             Text('Access token'),
             SizedBox(width: AppConstant.appPadding / 2),
             Flexible(
-              child: ShadInput(
-                // initialValue: '',
-                placeholder: Text('enter token'),
-                keyboardType: TextInputType.emailAddress,
+              child: BlocBuilder<HomeBloc, HomeBlocState>(
+                builder: (context, state) {
+                  if (state is HomeBlocState_Loaded) {
+                    return ShadInput(
+                      initialValue: state.accessToken,
+                      placeholder: Text('Enter token'),
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value)=> context.read<HomeBloc>().add(HomeBLocEvent_change_oatuh2_access_token(token: value)),
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               ),
             ),
           ],
