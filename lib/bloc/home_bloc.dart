@@ -34,6 +34,11 @@ class HomeBlocEvent_ChangeEndPointUrl extends HomeBlocEvent {
   HomeBlocEvent_ChangeEndPointUrl({required this.value});
 }
 
+class HomeBlocEvent_ChangeEndPointMethodUrl extends HomeBlocEvent {
+  final String value;
+  HomeBlocEvent_ChangeEndPointMethodUrl({required this.value});
+}
+
 class HomeBlocEvent_add_new_query_parameter extends HomeBlocEvent {}
 
 class HomeBlocEvent_change_query_checkbox_value extends HomeBlocEvent {
@@ -139,6 +144,7 @@ class HomeBlocState_Initial extends HomeBlocState {}
 class HomeBlocState_Loaded extends HomeBlocState {
   // varaibles
   final HTTP_METHOD currentMethod; // http method
+  final String endpointMethod;  // endpoint method body 
   final String endpoint; // url endpoint
   final String tabIndex; // tab index (query-header-auth-body)
   final String bodyTabIndex; // JSON - XML
@@ -157,6 +163,7 @@ class HomeBlocState_Loaded extends HomeBlocState {
   final String? oauth2TokenPrefix; // auth oatuh token prefix
 
   HomeBlocState_Loaded({
+    required this.endpointMethod,
     required this.currentMethod,
     required this.endpoint,
     required this.tabIndex,
@@ -176,6 +183,7 @@ class HomeBlocState_Loaded extends HomeBlocState {
 
   HomeBlocState_Loaded copyWith({
     HTTP_METHOD? currentMethod,
+    String? endpointMethod,
     String? endpoint,
     String? tabIndex,
     String? bodyTabIndex,
@@ -192,6 +200,7 @@ class HomeBlocState_Loaded extends HomeBlocState {
     String? oauth2AccessToken,
   }) {
     return HomeBlocState_Loaded(
+      endpointMethod: endpointMethod ?? this.endpointMethod,
       currentMethod: currentMethod ?? this.currentMethod,
       endpoint: endpoint ?? this.endpoint,
       tabIndex: tabIndex ?? this.tabIndex,
@@ -236,6 +245,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       // SET DEFAULT DATA
       emit(
         HomeBlocState_Loaded(
+          endpointMethod: '',
           currentMethod: HTTP_METHOD.GET,
           endpoint: '',
           tabIndex: AppConstant.tab_query,
@@ -286,6 +296,17 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       logger.i('Current endpoint value : ${event.value}');
       if (currentState is HomeBlocState_Loaded) {
         emit(currentState.copyWith(endpoint: event.value));
+      }
+    });
+
+       ///
+    /// HOME BLOC EVENT - CHANGE ENDPOINT URL
+    ///
+    on<HomeBlocEvent_ChangeEndPointMethodUrl>((event, emit) {
+      final currentState = state;
+      logger.i('Current endpoint method value : ${event.value}');
+      if (currentState is HomeBlocState_Loaded) {
+        emit(currentState.copyWith(endpointMethod: event.value));
       }
     });
 
@@ -547,8 +568,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-
-     ///
+    ///
     /// HOME BLOC EVENT - CHANGE BODY CONTENT
     ///
     on<HomeBLocEvent_change_body_content>((event, emit) {

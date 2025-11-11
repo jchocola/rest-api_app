@@ -34,8 +34,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final endpointController = TextEditingController();
-
- // String selectedTab = 'Query';
+  final endpointMethodController = TextEditingController();
+  // String selectedTab = 'Query';
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +127,14 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: [
           SizedBox(height: AppConstant.appPadding / 2),
-
+          ShadInput(
+            controller: endpointController,
+            onChanged: (value) => context.read<HomeBloc>().add(
+              HomeBlocEvent_ChangeEndPointUrl(value: value),
+            ),
+            placeholder: Text('https://jsonplaceholder.typicode.com'),
+          ),
+          SizedBox(height: AppConstant.appPadding / 2),
           // methods and input fields will go here
           Row(
             children: [
@@ -165,9 +172,11 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 flex: 3,
                 child: ShadInput(
-                  controller: endpointController,
-                   onChanged: (value) => context.read<HomeBloc>().add(HomeBlocEvent_ChangeEndPointUrl(value: value)),
-                  placeholder: Text('Endpoint URL'),
+                  controller: endpointMethodController,
+                  onChanged: (value) => context.read<HomeBloc>().add(
+                    HomeBlocEvent_ChangeEndPointMethodUrl(value: value),
+                  ),
+                  placeholder: Text('/todos/1'),
                   keyboardType: TextInputType.emailAddress,
                 ),
               ),
