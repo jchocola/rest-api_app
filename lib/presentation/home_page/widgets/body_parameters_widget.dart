@@ -57,7 +57,47 @@ class _BodyParametersWidgetState extends State<BodyParametersWidget> {
         ///
         ///
         ///
-        ShadTextarea(minHeight: size.height * 0.5),
+        BlocBuilder<HomeBloc, HomeBlocState>(
+          builder: (context, state) {
+            if (state is HomeBlocState_Loaded) {
+              return ShadTextarea(
+                minHeight: size.height * 0.5,
+                initialValue: state.bodyContent,
+                onChanged: (value) {
+                  context.read<HomeBloc>().add(
+                    HomeBLocEvent_change_body_content(bodyContent: value),
+                  );
+                },
+                placeholder: state.bodyTabIndex == AppConstant.tab_json
+                    ? Text("""
+  {
+  "name": "John Doe",
+  "age": 30,
+  "isStudent": false
+}
+""")
+                    : Text("""
+<?xml version="1.0" encoding="UTF-8"?>
+<Person age="32" height="172cm">
+  <Name>Cormac Keogh</Name>
+  <Address>
+    <Street>123 Main Street</Street>
+    <City>Anytown</City>
+    <ZipCode>12345</ZipCode>
+  </Address>
+  <ContactInfo>
+    <Email>cormac.keogh@example.com</Email>
+    <Phone type="mobile">555-123-4567</Phone>
+  </ContactInfo>
+</Person>
+
+"""),
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ),
       ],
     );
   }

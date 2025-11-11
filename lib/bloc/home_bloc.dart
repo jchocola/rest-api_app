@@ -124,6 +124,11 @@ class HomeBlocEvent_change_body_index extends HomeBlocEvent {
   HomeBlocEvent_change_body_index({required this.bodyIndex});
 }
 
+class HomeBLocEvent_change_body_content extends HomeBlocEvent {
+  final String bodyContent;
+  HomeBLocEvent_change_body_content({required this.bodyContent});
+}
+
 ///
 /// STATES
 ///
@@ -539,6 +544,19 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       logger.i('Change body tab : ${event.bodyIndex}');
       if (currentState is HomeBlocState_Loaded) {
         emit(currentState.copyWith(bodyTabIndex: event.bodyIndex));
+      }
+    });
+
+
+     ///
+    /// HOME BLOC EVENT - CHANGE BODY CONTENT
+    ///
+    on<HomeBLocEvent_change_body_content>((event, emit) {
+      final currentState = state;
+
+      logger.i('Change body content : ${event.bodyContent}');
+      if (currentState is HomeBlocState_Loaded) {
+        emit(currentState.copyWith(bodyContent: event.bodyContent));
       }
     });
   }
