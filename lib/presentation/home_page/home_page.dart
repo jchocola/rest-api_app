@@ -1,8 +1,10 @@
 import 'package:api_client/bloc/home_bloc.dart';
 import 'package:api_client/bloc/key_bloc.dart';
+import 'package:api_client/bloc/request_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/core/icons/app_icon.dart';
+import 'package:api_client/data/model/request_model.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/presentation/drawer_page/drawer_page.dart';
 import 'package:api_client/presentation/history_page/history_page.dart';
@@ -13,6 +15,7 @@ import 'package:api_client/presentation/home_page/widgets/query_parameters_widge
 import 'package:api_client/widgets/app_bar.dart';
 import 'package:api_client/widgets/empty_widget.dart';
 import 'package:api_client/widgets/key_card.dart';
+import 'package:elegant_notification/elegant_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -231,11 +234,51 @@ class _HomePageState extends State<HomePage> {
           Expanded(child: SingleChildScrollView(child: _buildContent(context))),
 
           const SizedBox(height: AppConstant.appPadding),
+
           // Send Request Button
           SafeArea(
-            child: ShadButton(
-              child: const Text('Send Request'),
-              onPressed: () {},
+            child: BlocBuilder<HomeBloc, HomeBlocState>(
+              builder: (context, homeBlocState) {
+                if (homeBlocState is HomeBlocState_Loaded) {
+                  return BlocConsumer<RequestBloc, RequestBlocState>(
+                    listener: (context, state) {
+                      if (state is RequestBlocState_Error) {
+                        ElegantNotification.error(
+                          description: Text(state.error),
+                        ).show(context);
+                      } else if (state is RequestBlocState_Success) {
+                        logger.i('GET RESPONSE');
+                      }
+                    },
+
+                    builder: (context, state) {
+                      if (state is RequestBlocState_Initial) {
+                        return ShadButton(
+                          child: const Text('Send Request'),
+                          onPressed: () {
+                            final RequestModel request = RequestModel(
+                              id: '4',
+                              httpMethod: HTTP_METHOD.GET,
+                              url: 'https://jsonplaceholder.typicode.com/todos/1',
+                              createdAt: DateTime.now(),
+                            );
+
+                            context.read<RequestBloc>().add(
+                              RequestBlocEvent_make_request(
+                                requestModel: request,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
             ),
           ),
         ],

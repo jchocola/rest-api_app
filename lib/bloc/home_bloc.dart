@@ -238,9 +238,7 @@ class HomeBlocState_Success extends HomeBlocState {
 ///
 
 class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
-  final HttpServiceRepository httServiceRepository;
-
-  HomeBloc({required this.httServiceRepository}) : super(HomeBlocState_Initial()) {
+  HomeBloc() : super(HomeBlocState_Initial()) {
     ///
     /// HOME BLOC EVENT _ INIT
     ///
