@@ -148,6 +148,7 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
                 initialValue: state.bearerToken,
                 placeholder: Text('Enter token'),
                 onChanged: (value) {
+                  logger.i('UI: bearerToken onChanged -> $value');
                   context.read<HomeBloc>().add(
                     HomeBLocEvent_change_bearer_auth_token(token: value),
                   );
@@ -168,15 +169,18 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
                 builder: (context, state) {
                   if (state is HomeBlocState_Loaded) {
                     return ShadInput(
+                      key: ValueKey('bearerTokenPrefix'),
                       initialValue: state.bearerTokenPrefix,
                       placeholder: Text('Bearer'),
                       keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) => context.read<HomeBloc>()
-                        ..add(
+                      onChanged: (value) {
+                        logger.i('UI: bearerTokenPrefix onChanged -> $value');
+                        context.read<HomeBloc>().add(
                           HomeBLocEvent_change_bearer_auth_token_prefix(
                             tokenPrefix: value,
                           ),
-                        ),
+                        );
+                      },
                     );
                   } else {
                     return CircularProgressIndicator();
@@ -208,12 +212,14 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
                       initialValue: state.oauth2TokenPrefix,
                       placeholder: Text('Bearer'),
                       keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) => context.read<HomeBloc>()
-                        ..add(
+                      onChanged: (value) {
+                        logger.i('UI: oauth2TokenPrefix onChanged -> $value');
+                        context.read<HomeBloc>().add(
                           HomeBLocEvent_change_oauth2_token_prefix(
                             tokenPrefix: value,
                           ),
-                        ),
+                        );
+                      },
                     );
                   } else {
                     return CircularProgressIndicator();
@@ -232,12 +238,18 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
                 builder: (context, state) {
                   if (state is HomeBlocState_Loaded) {
                     return ShadInput(
+                      key: ValueKey('oauth2AccessToken'),
                       initialValue: state.oauth2AccessToken,
                       placeholder: Text('Enter token'),
                       keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) => context.read<HomeBloc>().add(
-                        HomeBLocEvent_change_oauth2_access_token(token: value),
-                      ),
+                      onChanged: (value) {
+                          logger.i('UI: oauth2AccessToken onChanged -> $value');
+                        context.read<HomeBloc>().add(
+                          HomeBLocEvent_change_oauth2_access_token(
+                            token: value,
+                          ),
+                        );
+                      },
                     );
                   } else {
                     return CircularProgressIndicator();
