@@ -14,8 +14,8 @@ class EmptyWidget extends StatelessWidget {
         children: [
           Image.asset(
             AppConstant.emptyImageUrl,
-            width: size.width ,
-            height: size.width,
+            // width: size.width ,
+            // height: size.width,
           ),
         ],
       ),

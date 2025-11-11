@@ -1,7 +1,9 @@
+import 'package:api_client/bloc/home_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/widgets/parameter_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class AuthParametersWidget extends StatefulWidget {
@@ -12,40 +14,48 @@ class AuthParametersWidget extends StatefulWidget {
 }
 
 class _AuthParametersWidgetState extends State<AuthParametersWidget> {
-  String selectedTab = 'None';
+  //String selectedTab = 'None';
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ShadTabs(
-          //  controller: _tabsController,
-          scrollable: true,
-          onChanged: (value) {
-            setState(() {
-              selectedTab = value;
-            });
-            logger.i('Selected tab: $value');
+        BlocBuilder<HomeBloc, HomeBlocState>(
+          builder: (context, state) {
+            if (state is HomeBlocState_Loaded) {
+              return ShadTabs(
+                //  controller: _tabsController,
+                scrollable: true,
+                onChanged: (value) {
+                  context.read<HomeBloc>().add(
+                    HomeBlocEvent_change_auth_index(authIndex: value),
+                  );
+                  logger.i('Selected tab: $value');
+                },
+                value: state.authTabIndex,
+                tabs: [
+                  ShadTab(
+                    value: AppConstant.tab_none,
+                    child: Center(child: Text('None')),
+                  ),
+                  ShadTab(
+                    value: AppConstant.tab_basic,
+                    child: Center(child: Text('Basic')),
+                  ),
+                  ShadTab(
+                    value: AppConstant.tab_bearer,
+                    child: Center(child: Text('Bearer')),
+                  ),
+                  ShadTab(
+                    value: AppConstant.tab_oauth2,
+                    child: Center(child: Text('OAuth2')),
+                  ),
+                ],
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
           },
-          value: selectedTab,
-          tabs: [
-            ShadTab(
-              value: 'None',
-              child: Center(child: Text('None')),
-            ),
-            ShadTab(
-              value: 'Basic',
-              child: Center(child: Text('Basic')),
-            ),
-            ShadTab(
-              value: 'Bearer',
-              child: Center(child: Text('Bearer')),
-            ),
-            ShadTab(
-              value: 'OAuth2',
-              child: Center(child: Text('OAuth2')),
-            ),
-          ],
         ),
 
         const SizedBox(height: AppConstant.appPadding),
@@ -56,18 +66,26 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
   }
 
   Widget _buildContent(BuildContext context) {
-    switch (selectedTab) {
-      case 'None':
-        return const Text('No Authentication Selected');
-      case 'Basic':
-        return _basic(context);
-      case 'Bearer':
-        return _bearer(context);
-      case 'OAuth2':
-        return _oauth2(context);
-      default:
-        return const Center(child: Text('Select a tab'));
-    }
+    return BlocBuilder<HomeBloc, HomeBlocState>(
+      builder: (context, state) {
+        if (state is HomeBlocState_Loaded) {
+          switch (state.authTabIndex) {
+            case AppConstant.tab_none:
+              return const Text('No Authentication Selected');
+            case AppConstant.tab_basic:
+              return _basic(context);
+            case AppConstant.tab_bearer:
+              return _bearer(context);
+            case AppConstant.tab_oauth2:
+              return _oauth2(context);
+            default:
+              return const Center(child: Text('Select a tab'));
+          }
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 
   Widget _basic(context) {
@@ -80,7 +98,7 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
           placeholder: Text('Username'),
           keyboardType: TextInputType.emailAddress,
         ),
-      
+
         ShadInput(
           placeholder: Text('Password'),
           keyboardType: TextInputType.emailAddress,
@@ -95,14 +113,12 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Bearer Token'),
-       ShadTextarea(
-        placeholder: Text('Enter token'),
-       ),
+        ShadTextarea(placeholder: Text('Enter token')),
 
         Row(
           children: [
             Text('Token prefix'),
-            SizedBox(width: AppConstant.appPadding/2,),
+            SizedBox(width: AppConstant.appPadding / 2),
             Flexible(
               child: ShadInput(
                 initialValue: 'Bearer',
@@ -122,10 +138,10 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
       spacing: AppConstant.appPadding,
       children: [
         Text('OAuth Authentication'),
-          Row(
+        Row(
           children: [
             Text('Token prefix'),
-            SizedBox(width: AppConstant.appPadding/2,),
+            SizedBox(width: AppConstant.appPadding / 2),
             Flexible(
               child: ShadInput(
                 initialValue: 'Bearer',
@@ -135,13 +151,13 @@ class _AuthParametersWidgetState extends State<AuthParametersWidget> {
             ),
           ],
         ),
-           Row(
+        Row(
           children: [
             Text('Access token'),
-            SizedBox(width: AppConstant.appPadding/2,),
+            SizedBox(width: AppConstant.appPadding / 2),
             Flexible(
               child: ShadInput(
-               // initialValue: '',
+                // initialValue: '',
                 placeholder: Text('enter token'),
                 keyboardType: TextInputType.emailAddress,
               ),

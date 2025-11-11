@@ -59,14 +59,12 @@ class HomeBlocEvent_change_query_parameter_value extends HomeBlocEvent {
   });
 }
 
-
 class HomeBlocEvent_add_new_header_parameter extends HomeBlocEvent {}
 
 class HomeBlocEvent_change_header_checkbox_value extends HomeBlocEvent {
   final int headerParamIndex;
   HomeBlocEvent_change_header_checkbox_value({required this.headerParamIndex});
 }
-
 
 class HomeBlocEvent_change_header_parameter_name extends HomeBlocEvent {
   final int headerParamIndex;
@@ -77,7 +75,6 @@ class HomeBlocEvent_change_header_parameter_name extends HomeBlocEvent {
   });
 }
 
-
 class HomeBlocEvent_change_header_parameter_value extends HomeBlocEvent {
   final int headerParamIndex;
   final String parameterValue;
@@ -85,6 +82,11 @@ class HomeBlocEvent_change_header_parameter_value extends HomeBlocEvent {
     required this.headerParamIndex,
     required this.parameterValue,
   });
+}
+
+class HomeBlocEvent_change_auth_index extends HomeBlocEvent {
+  final String authIndex;
+  HomeBlocEvent_change_auth_index({required this.authIndex});
 }
 
 ///
@@ -100,7 +102,8 @@ class HomeBlocState_Loaded extends HomeBlocState {
   final String endpoint; // url endpoint
   final String tabIndex; // tab index (query-header-auth-body)
   final String bodyTabIndex; // JSON - XML
-  final String bodyContent;
+  final String bodyContent; // body content
+  final String authTabIndex; // auth tab index  (none- basic- bearer - oauth2)
 
   final List<ParameterModel> queryParameters; // query parameters
   final List<ParameterModel> headerParameters; // header parameters
@@ -113,6 +116,7 @@ class HomeBlocState_Loaded extends HomeBlocState {
     required this.bodyTabIndex,
     required this.headerParameters,
     required this.queryParameters,
+    required this.authTabIndex
   });
 
   HomeBlocState_Loaded copyWith({
@@ -123,6 +127,7 @@ class HomeBlocState_Loaded extends HomeBlocState {
     String? bodyContent,
     List<ParameterModel>? queryParameters,
     List<ParameterModel>? headerParameters,
+    String? authTabIndex,
   }) {
     return HomeBlocState_Loaded(
       currentMethod: currentMethod ?? this.currentMethod,
@@ -132,6 +137,7 @@ class HomeBlocState_Loaded extends HomeBlocState {
       bodyContent: bodyContent ?? this.bodyContent,
       queryParameters: queryParameters ?? this.queryParameters,
       headerParameters: headerParameters ?? this.headerParameters,
+      authTabIndex: authTabIndex ?? this.authTabIndex
     );
   }
 }
@@ -168,6 +174,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
           bodyTabIndex: AppConstant.tab_none,
           headerParameters: [],
           queryParameters: [],
+          authTabIndex: AppConstant.tab_none
         ),
       );
 
@@ -290,9 +297,6 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-
-
-
     ///
     /// HOME BLOC EVENT - ADD NEW HEADER PARAMETER Tapped
     ///
@@ -310,14 +314,15 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-
-     ///
+    ///
     /// HOME BLOC EVENT - CHANGE CHECK BOX VALUE
     ///
     on<HomeBlocEvent_change_header_checkbox_value>((event, emit) {
       final currentState = state;
 
-      logger.i('Changed checkbox header value - index : ${event.headerParamIndex}');
+      logger.i(
+        'Changed checkbox header value - index : ${event.headerParamIndex}',
+      );
       if (currentState is HomeBlocState_Loaded) {
         final headerParams = currentState.headerParameters;
 
@@ -331,8 +336,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-
-      ///
+    ///
     /// HOME BLOC EVENT - CHANGE HEADER PARAMETER NAME
     ///
     on<HomeBlocEvent_change_header_parameter_name>((event, emit) {
@@ -354,8 +358,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
       }
     });
 
-
-     ///
+    ///
     /// HOME BLOC EVENT - CHANGE HEADER PARAMETER VALUE
     ///
     on<HomeBlocEvent_change_header_parameter_value>((event, emit) {
@@ -374,6 +377,18 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
         headerParams[event.headerParamIndex] = updated;
 
         emit(currentState.copyWith(headerParameters: headerParams));
+      }
+    });
+
+
+
+     ///
+    /// HOME BLOC EVENT - CHANGE TAB INDEX
+    ///
+    on<HomeBlocEvent_change_auth_index>((event, emit) {
+      final currentState = state;
+      if (currentState is HomeBlocState_Loaded) {
+        emit(currentState.copyWith(authTabIndex: event.authIndex));
       }
     });
   }
