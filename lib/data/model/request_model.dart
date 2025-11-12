@@ -31,8 +31,12 @@ class RequestModel {
   /// Basic Auth password
   final String? bearerToken;
 
+  final String? bearerTokenPrefix;
+
   /// Bearer Token
   final String? oauthToken;
+
+  final String? oauthTokenPrefix;
 
   /// OAuth 2.0 token
   final int timeout;
@@ -69,7 +73,9 @@ class RequestModel {
     this.username,
     this.password,
     this.bearerToken,
+    this.bearerTokenPrefix,
     this.oauthToken,
+    this.oauthTokenPrefix,
     this.timeout = 30000,
     this.followRedirects = true,
     this.maxRedirects = 5,

@@ -15,8 +15,8 @@ class DioHttpServiceRepoImpl implements HttpServiceRepository {
   @override
   Future<Response> makeGETrequest({required RequestModel request}) async {
     try {
-      final path = request.url;
-      final queryParameters = request.queryParameters;
+      final path = request.url;       // url
+      final queryParameters = request.queryParameters; // query parameters
       final options = Options(headers: request.headers);
 
       final Response response = await dio.get(

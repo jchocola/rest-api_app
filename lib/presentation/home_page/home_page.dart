@@ -308,8 +308,16 @@ class _HomePageState extends State<HomePage> {
                               httpMethod: homeBlocState.currentMethod,
                               url: requestFullPath,
                               createdAt: DateTime.now(),
+                              updatedAt: DateTime.now(),
                               body: homeBlocState.bodyContent,
-                              headers: parameterListFormatter(paramsList: homeBlocState.headerParameters)
+                              username: homeBlocState.username,
+                              password: homeBlocState.password,
+                              bearerToken: homeBlocState.bearerToken,
+                              bearerTokenPrefix: homeBlocState.bearerTokenPrefix,
+                              oauthToken: homeBlocState.oauth2AccessToken,
+                              oauthTokenPrefix: homeBlocState.oauth2TokenPrefix,
+                              headers: parameterListFormatter(paramsList: homeBlocState.headerParameters),
+
                             );
 
 
