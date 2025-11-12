@@ -1,6 +1,12 @@
+import 'package:api_client/bloc/home_bloc.dart';
 import 'package:api_client/bloc/key_bloc.dart';
+import 'package:api_client/bloc/request_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
+import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/core/icons/app_icon.dart';
+import 'package:api_client/core/utils/parameter_list_formatter.dart';
+import 'package:api_client/core/utils/response_size_calculator.dart';
+import 'package:api_client/data/model/request_model.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/presentation/drawer_page/drawer_page.dart';
 import 'package:api_client/presentation/history_page/history_page.dart';
@@ -11,17 +17,20 @@ import 'package:api_client/presentation/home_page/widgets/query_parameters_widge
 import 'package:api_client/widgets/app_bar.dart';
 import 'package:api_client/widgets/empty_widget.dart';
 import 'package:api_client/widgets/key_card.dart';
+import 'package:elegant_notification/elegant_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interactive_json_preview/interactive_json_preview.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:uuid/uuid.dart';
 
-final fruits = {
-  'get': 'GET',
-  'post': 'POST',
-  'put': 'PUT',
-  'delete': 'DELETE',
-  'PATCH': 'PATCH',
-};
+// final fruits = {
+//   'get': 'GET',
+//   'post': 'POST',
+//   'put': 'PUT',
+//   'delete': 'DELETE',
+//   'PATCH': 'PATCH',
+// };
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,11 +40,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final ShadTabsController _tabsController = ShadTabsController<String>(
-  //   value: 'Query',
-  // );
-
-  String selectedTab = 'Query';
+  final endpointController = TextEditingController();
+  final endpointMethodController = TextEditingController();
+  // String selectedTab = 'Query';
 
   @override
   Widget build(BuildContext context) {
@@ -47,28 +54,39 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    void _onKeyTapped(){
+    void _onKeyTapped() {
       showModalBottomSheet(
         showDragHandle: true,
-        context: context, builder: (context) {
-        return BlocBuilder<KeyBloc, KeyBlocState>(builder: (context,state){
-          if (state is KeyBlocLoaded) {
-            if (state.keys.isNotEmpty) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
-                child: Column(
-                  spacing: AppConstant.appPadding/2,
-                  children: List.generate(state.keys.length, (index)=> KeyCard(keyModel: state.keys[index])),
-                ),
-              );
-            } else {
-             return EmptyWidget();
-            }
-          } else {
-            return EmptyWidget();
-          }
-        });
-      });
+        context: context,
+        builder: (context) {
+          return BlocBuilder<KeyBloc, KeyBlocState>(
+            builder: (context, state) {
+              if (state is KeyBlocLoaded) {
+                if (state.keys.isNotEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppConstant.appPadding,
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        spacing: AppConstant.appPadding / 2,
+                        children: List.generate(
+                          state.keys.length,
+                          (index) => KeyCard(keyModel: state.keys[index]),
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return EmptyWidget();
+                }
+              } else {
+                return EmptyWidget();
+              }
+            },
+          );
+        },
+      );
     }
 
     void _onHistoryPressed() {
@@ -92,11 +110,11 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(AppIcons.menuIcon),
           ),
           actions: [
-              /// KEY BUTTON
-              IconButton(
+            /// KEY BUTTON
+            IconButton(
               onPressed: () => _onKeyTapped(),
               icon: const Icon(AppIcons.keyIcon),
-            ), 
+            ),
 
             /// HISTORY BUTTON
             IconButton(
@@ -113,12 +131,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
       child: Column(
         children: [
           SizedBox(height: AppConstant.appPadding / 2),
-
+          ShadInput(
+            controller: endpointController,
+            onChanged: (value) => context.read<HomeBloc>().add(
+              HomeBlocEvent_ChangeEndPointUrl(value: value),
+            ),
+            placeholder: Text('https://jsonplaceholder.typicode.com'),
+          ),
+          SizedBox(height: AppConstant.appPadding / 2),
           // methods and input fields will go here
           Row(
             children: [
@@ -126,19 +152,37 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 flex: 1,
                 child: ShadSelect<String>(
-                  placeholder: const Text('POST'),
+                  placeholder: BlocBuilder<HomeBloc, HomeBlocState>(
+                    builder: (context, state) {
+                      if (state is HomeBlocState_Loaded) {
+                        return Text(state.currentMethod.name);
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
                   options: [
-                    // Padding(
-                    //   padding: const EdgeInsets.fromLTRB(32, 6, 6, 6),
-                    //   child: Text('Methods', textAlign: TextAlign.start),
-                    // ),
-                    ...fruits.entries.map(
-                      (e) => ShadOption(value: e.key, child: Text(e.value)),
+                    ...HTTP_METHOD.values.map(
+                      (e) => ShadOption(value: e.name, child: Text(e.name)),
                     ),
                   ],
                   selectedOptionBuilder: (context, value) =>
-                      Text(fruits[value]!),
-                  onChanged: print,
+                      BlocBuilder<HomeBloc, HomeBlocState>(
+                        builder: (context, state) {
+                          if (state is HomeBlocState_Loaded) {
+                            return Text(state.currentMethod.name);
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                  onChanged: (value) {
+                    context.read<HomeBloc>().add(
+                      HomeBlocEvent_ChangeHttpMethod(
+                        method: httpMethodConvertFromString(value: value!),
+                      ),
+                    );
+                  },
                 ),
               ),
               // input fields
@@ -146,7 +190,11 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 flex: 3,
                 child: ShadInput(
-                  placeholder: Text('URL'),
+                  controller: endpointMethodController,
+                  onChanged: (value) => context.read<HomeBloc>().add(
+                    HomeBlocEvent_ChangeEndPointMethodUrl(value: value),
+                  ),
+                  placeholder: Text('/todos/1'),
                   keyboardType: TextInputType.emailAddress,
                 ),
               ),
@@ -158,34 +206,42 @@ class _HomePageState extends State<HomePage> {
           ///
           ///
           // rest of the body content
-          ShadTabs(
-            //  controller: _tabsController,
-            scrollable: true,
-            onChanged: (value) {
-              setState(() {
-                selectedTab = value;
-              });
-              logger.i('Selected tab: $value');
+          BlocBuilder<HomeBloc, HomeBlocState>(
+            builder: (context, state) {
+              if (state is HomeBlocState_Loaded) {
+                return ShadTabs(
+                  //  controller: _tabsController,
+                  scrollable: true,
+                  onChanged: (value) {
+                    context.read<HomeBloc>().add(
+                      HomeBlocEvent_ChangeTabIndex(tabIndex: value),
+                    );
+                    logger.i('Selected tab: $value');
+                  },
+                  value: state.tabIndex,
+                  tabs: [
+                    ShadTab(
+                      value: AppConstant.tab_query,
+                      child: Center(child: Text('Query')),
+                    ),
+                    ShadTab(
+                      value: AppConstant.tab_headers,
+                      child: Center(child: Text('Headers')),
+                    ),
+                    // ShadTab(
+                    //   value: AppConstant.tab_auth,
+                    //   child: Center(child: Text('Auth')),
+                    // ),
+                    ShadTab(
+                      value: AppConstant.tab_body,
+                      child: Center(child: Text('Body')),
+                    ),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
             },
-            value: selectedTab,
-            tabs: [
-              ShadTab(
-                value: 'Query',
-                child: Center(child: Text('Query')),
-              ),
-              ShadTab(
-                value: 'Headers',
-                child: Center(child: Text('Headers')),
-              ),
-              ShadTab(
-                value: 'Auth',
-                child: Center(child: Text('Auth')),
-              ),
-              ShadTab(
-                value: 'Body',
-                child: Center(child: Text('Body')),
-              ),
-            ],
           ),
 
           const SizedBox(height: AppConstant.appPadding),
@@ -193,11 +249,98 @@ class _HomePageState extends State<HomePage> {
           Expanded(child: SingleChildScrollView(child: _buildContent(context))),
 
           const SizedBox(height: AppConstant.appPadding),
+
           // Send Request Button
           SafeArea(
-            child: ShadButton(
-              child: const Text('Send Request'),
-              onPressed: () {},
+            child: BlocBuilder<HomeBloc, HomeBlocState>(
+              builder: (context, homeBlocState) {
+                if (homeBlocState is HomeBlocState_Loaded) {
+                  return BlocConsumer<RequestBloc, RequestBlocState>(
+                    listener: (context, state) {
+                      if (state is RequestBlocState_Error) {
+                        ElegantNotification.error(
+                          displayCloseButton: true,
+                          showProgressIndicator: false,
+                          toastDuration: AppConstant.errorToastDuration,
+                          title: Text('Check passed parameters again'),
+                          description: Text(state.error),
+                          height: 500,
+                        ).show(context);
+                      } else if (state is RequestBlocState_Success) {
+                        logger.i('GET RESPONSE');
+                          ElegantNotification.success(
+                            notificationMargin: AppConstant.appPadding,
+                          displayCloseButton: true,
+                          action: ShadButton.secondary(child: Text('Save to more detail'),),
+                          showProgressIndicator: true,
+                          toastDuration: AppConstant.errorToastDuration,
+                          title: Row(
+                            spacing: AppConstant.appPadding,
+                            children: [
+                              Text(state.response.statusCode.toString()),
+                              Text(state.response.statusMessage.toString()),
+                              Text(calculateTotalResponseSize(state.response).toString() + 'bytes')
+                            ],
+                          ),
+                          description: SizedBox(
+                            width: 500,
+                            height: 500,
+                            child: InteractiveJsonPreview(data: state.response.data,)),
+                          //description: Text(state.response.data.toString(), maxLines: 20,),
+                          height: size.height * 0.8,
+                          width: size.width * 0.8,
+                        ).show(context);
+                      }
+                    },
+
+                    builder: (context, state) {
+                      if (state is RequestBlocState_Initial) {
+                        return ShadButton(
+                          child: const Text('Send Request'),
+                          onPressed: () {
+
+                            /// get full path request
+                            final requestFullPath =
+                                homeBlocState.endpoint +
+                                homeBlocState.endpointMethod;
+
+                            /// generate request model
+                            final RequestModel request = RequestModel(
+                              id: Uuid().v4().substring(0, 8),
+                              queryParameters: parameterListFormatter(paramsList: homeBlocState.queryParameters),
+                              httpMethod: homeBlocState.currentMethod,
+                              url: requestFullPath,
+                              createdAt: DateTime.now(),
+                              updatedAt: DateTime.now(),
+                              body: homeBlocState.bodyContent,
+                              username: homeBlocState.username,
+                              password: homeBlocState.password,
+                              bearerToken: homeBlocState.bearerToken,
+                              bearerTokenPrefix: homeBlocState.bearerTokenPrefix,
+                              oauthToken: homeBlocState.oauth2AccessToken,
+                              oauthTokenPrefix: homeBlocState.oauth2TokenPrefix,
+                              headers: parameterListFormatter(paramsList: homeBlocState.headerParameters),
+
+                            );
+
+
+                            /// send request model to request bloc
+                            context.read<RequestBloc>().add(
+                              RequestBlocEvent_make_request(
+                                requestModel: request,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
             ),
           ),
         ],
@@ -206,17 +349,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildContent(BuildContext context) {
-    switch (selectedTab) {
-      case 'Query':
-        return const QueryParametersWidget();
-      case 'Headers':
-        return const HeaderParameterWidget();
-      case 'Auth':
-        return const AuthParametersWidget();
-      case 'Body':
-        return const BodyParametersWidget();
-      default:
-        return const Center(child: Text('Select a tab'));
-    }
+    return BlocBuilder<HomeBloc, HomeBlocState>(
+      builder: (context, state) {
+        if (state is HomeBlocState_Loaded) {
+          switch (state.tabIndex) {
+            case AppConstant.tab_query:
+              return const QueryParametersWidget();
+            case AppConstant.tab_headers:
+              return const HeaderParameterWidget();
+            case AppConstant.tab_auth:
+              return const AuthParametersWidget();
+            case AppConstant.tab_body:
+              return const BodyParametersWidget();
+            default:
+              return const Center(child: Text('Select a tab'));
+          }
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 }

@@ -21,4 +21,7 @@ class AppIcons {
   static const IconData editIcon = Icons.edit;
 
   static const IconData addIcon = Icons.add;
+
+  static const IconData callIcon = Icons.call_made_outlined;
+  static const IconData reuseIcon = Icons.recycling_outlined;
 }
