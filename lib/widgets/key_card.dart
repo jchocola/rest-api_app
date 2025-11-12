@@ -52,10 +52,10 @@ class KeyCard extends StatelessWidget {
       ),
       child: ShadCard(
         width: double.infinity,
-        title: Text(keyModel.name),
+        title: Text(keyModel.name , maxLines: 1,),
         trailing: ShadButton.ghost(child: Icon(AppIcons.copyIcon), onPressed: _copyTapped,),
 
-        child: Text(keyModel.value),
+        child: Text(keyModel.value, maxLines: 2, overflow: TextOverflow.fade,),
       ),
     );
   }

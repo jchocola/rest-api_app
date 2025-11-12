@@ -67,11 +67,13 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppConstant.appPadding,
                     ),
-                    child: Column(
-                      spacing: AppConstant.appPadding / 2,
-                      children: List.generate(
-                        state.keys.length,
-                        (index) => KeyCard(keyModel: state.keys[index]),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        spacing: AppConstant.appPadding / 2,
+                        children: List.generate(
+                          state.keys.length,
+                          (index) => KeyCard(keyModel: state.keys[index]),
+                        ),
                       ),
                     ),
                   );
