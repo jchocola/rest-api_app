@@ -36,7 +36,7 @@ class _BodyParametersWidgetState extends State<BodyParametersWidget> {
                   ),
                   ShadTab(
                     value: AppConstant.tab_xml,
-                    child: Center(child: Text('XML')),
+                    child: Center(child: Text('XML(coming soon)')),
                   ),
                   // ShadTab(
                   //   value: 'Auth',
