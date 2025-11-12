@@ -228,10 +228,10 @@ class _HomePageState extends State<HomePage> {
                       value: AppConstant.tab_headers,
                       child: Center(child: Text('Headers')),
                     ),
-                    ShadTab(
-                      value: AppConstant.tab_auth,
-                      child: Center(child: Text('Auth')),
-                    ),
+                    // ShadTab(
+                    //   value: AppConstant.tab_auth,
+                    //   child: Center(child: Text('Auth')),
+                    // ),
                     ShadTab(
                       value: AppConstant.tab_body,
                       child: Center(child: Text('Body')),
