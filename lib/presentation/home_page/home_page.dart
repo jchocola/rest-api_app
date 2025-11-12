@@ -257,9 +257,10 @@ class _HomePageState extends State<HomePage> {
                     listener: (context, state) {
                       if (state is RequestBlocState_Error) {
                         ElegantNotification.error(
-                          //displayCloseButton: false,
+                          displayCloseButton: true,
                           showProgressIndicator: false,
                           toastDuration: AppConstant.errorToastDuration,
+                          title: Text('Check passed parameters again'),
                           description: Text(state.error),
                           height: 500,
                         ).show(context);

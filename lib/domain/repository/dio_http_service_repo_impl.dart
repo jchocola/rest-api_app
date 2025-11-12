@@ -7,20 +7,15 @@ class DioHttpServiceRepoImpl implements HttpServiceRepository {
   final Dio dio = Dio();
 
   @override
-  Future<void> makeDELETErequest({required RequestModel request}) {
-    // TODO: implement makeDELETErequest
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Response> makeGETrequest({required RequestModel request}) async {
+  Future<Response> makeDELETErequest({required RequestModel request}) async {
     try {
-      final path = request.url;       // url
+      final path = request.url; // url
       final queryParameters = request.queryParameters; // query parameters
       final options = Options(headers: request.headers);
 
-      final Response response = await dio.get(
+      final Response response = await dio.delete(
         path,
+        data: request.body,
         queryParameters: queryParameters,
         options: options,
       );
@@ -34,32 +29,134 @@ class DioHttpServiceRepoImpl implements HttpServiceRepository {
   }
 
   @override
-  Future<void> makeHEADrequest({required RequestModel request}) {
-    // TODO: implement makeHEADrequest
-    throw UnimplementedError();
+  Future<Response> makeGETrequest({required RequestModel request}) async {
+    try {
+      final path = request.url; // url
+      final queryParameters = request.queryParameters; // query parameters
+      final options = Options(headers: request.headers);
+
+      final Response response = await dio.get(
+        path,
+        data: request.body,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      logger.i(response.data.toString());
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> makeOPTIONSrequest({required RequestModel request}) {
-    // TODO: implement makeOPTIONSrequest
-    throw UnimplementedError();
+  Future<Response> makeHEADrequest({required RequestModel request}) async {
+    try {
+      final path = request.url; // url
+      final queryParameters = request.queryParameters; // query parameters
+      final options = Options(headers: request.headers);
+
+      final Response response = await dio.head(
+        path,
+        data: request.body,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      logger.i(response.data.toString());
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> makePATCHrequest({required RequestModel request}) {
-    // TODO: implement makePATCHrequest
-    throw UnimplementedError();
+  Future<Response> makeOPTIONSrequest({required RequestModel request}) async {
+    try {
+      final path = request.url; // url
+      final queryParameters = request.queryParameters; // query parameters
+      final options = Options(headers: request.headers);
+
+      final Response response = await dio.head(
+        path,
+        data: request.body,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      logger.i(response.data.toString());
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> makePOSTrequest({required RequestModel request}) async{
-   // await dio.post(path)
-    throw UnimplementedError();
+  Future<Response> makePATCHrequest({required RequestModel request}) async {
+    try {
+      final path = request.url; // url
+      final queryParameters = request.queryParameters; // query parameters
+      final options = Options(headers: request.headers);
+
+      final Response response = await dio.patch(
+        path,
+        data: request.body,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      logger.i(response.data.toString());
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> makePUTrequest({required RequestModel request}) {
-    // TODO: implement makePUTrequest
-    throw UnimplementedError();
+  Future<Response> makePOSTrequest({required RequestModel request}) async {
+    try {
+      final path = request.url; // url
+      final queryParameters = request.queryParameters; // query parameters
+      final options = Options(headers: request.headers);
+
+      final Response response = await dio.post(
+        path,
+        data: request.body,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      logger.i(response.data.toString());
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Response> makePUTrequest({required RequestModel request}) async {
+    try {
+      final path = request.url; // url
+      final queryParameters = request.queryParameters; // query parameters
+      final options = Options(headers: request.headers);
+
+      final Response response = await dio.put(
+        path,
+        data: request.body,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      logger.i(response.data.toString());
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

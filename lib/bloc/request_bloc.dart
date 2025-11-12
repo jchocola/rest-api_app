@@ -58,31 +58,31 @@ class RequestBloc extends Bloc<RequestBlocEvent, RequestBlocState> {
             );
 
           case HTTP_METHOD.POST:
-            await httpServiceRepository.makePOSTrequest(
+            response = await httpServiceRepository.makePOSTrequest(
               request: event.requestModel,
             );
 
           case HTTP_METHOD.PUT:
-            await httpServiceRepository.makePUTrequest(
+            response = await httpServiceRepository.makePUTrequest(
               request: event.requestModel,
             );
 
           case HTTP_METHOD.PATCH:
-            await httpServiceRepository.makePATCHrequest(
+            response = await httpServiceRepository.makePATCHrequest(
               request: event.requestModel,
             );
 
           case HTTP_METHOD.DELETE:
-            await httpServiceRepository.makeDELETErequest(
+            response = await httpServiceRepository.makeDELETErequest(
               request: event.requestModel,
             );
           case HTTP_METHOD.OPTIONS:
-            await httpServiceRepository.makeOPTIONSrequest(
+            response = await httpServiceRepository.makeOPTIONSrequest(
               request: event.requestModel,
             );
 
           case HTTP_METHOD.HEAD:
-            await httpServiceRepository.makeHEADrequest(
+            response = await httpServiceRepository.makeHEADrequest(
               request: event.requestModel,
             );
         }
