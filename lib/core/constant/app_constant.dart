@@ -9,6 +9,8 @@ class AppConstant {
 
   static const String emptyImageUrl = 'assets/empty.png';
 
+  static const Duration errorToastDuration = Duration(seconds: 10);
+
   // TABS INDEX VALUES
   static const String tab_query = 'query';
   static const String tab_headers = 'headers';

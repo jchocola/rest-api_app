@@ -1,7 +1,9 @@
 // ignore_for_file: dangling_library_doc_comments, camel_case_types
 
+import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/data/model/request_model.dart';
 import 'package:api_client/data/repository/http_service_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// REQUEST BLOC EVENT
@@ -28,7 +30,10 @@ class RequestBlocState_Error extends RequestBlocState {
   RequestBlocState_Error({required this.error});
 }
 
-class RequestBlocState_Success extends RequestBlocState {}
+class RequestBlocState_Success extends RequestBlocState {
+  final Response response;
+  RequestBlocState_Success({required this.response});
+}
 
 ///
 /// REQUEST BLOC
@@ -44,8 +49,45 @@ class RequestBloc extends Bloc<RequestBlocEvent, RequestBlocState> {
       emit(RequestBlocState_Loading());
 
       try {
-       // await Future.delayed(Duration(seconds: 2));
-        await httpServiceRepository.makeGETrequest(request: event.requestModel);
+        late Response response;
+
+        switch (event.requestModel.httpMethod) {
+          case HTTP_METHOD.GET:
+            response = await httpServiceRepository.makeGETrequest(
+              request: event.requestModel,
+            );
+
+          case HTTP_METHOD.POST:
+            await httpServiceRepository.makePOSTrequest(
+              request: event.requestModel,
+            );
+
+          case HTTP_METHOD.PUT:
+            await httpServiceRepository.makePUTrequest(
+              request: event.requestModel,
+            );
+
+          case HTTP_METHOD.PATCH:
+            await httpServiceRepository.makePATCHrequest(
+              request: event.requestModel,
+            );
+
+          case HTTP_METHOD.DELETE:
+            await httpServiceRepository.makeDELETErequest(
+              request: event.requestModel,
+            );
+          case HTTP_METHOD.OPTIONS:
+            await httpServiceRepository.makeOPTIONSrequest(
+              request: event.requestModel,
+            );
+
+          case HTTP_METHOD.HEAD:
+            await httpServiceRepository.makeHEADrequest(
+              request: event.requestModel,
+            );
+        }
+
+        emit(RequestBlocState_Success(response: response));
       } catch (e) {
         emit(RequestBlocState_Error(error: e.toString()));
       } finally {

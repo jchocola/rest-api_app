@@ -49,6 +49,7 @@ dependencies:
   get_it: ^9.0.5
   elegant_notification: ^2.5.1
   tostore: ^2.2.2
+  uuid: ^4.5.2
 
 dev_dependencies:
   flutter_test:

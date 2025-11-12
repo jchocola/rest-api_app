@@ -4,6 +4,8 @@ import 'package:api_client/bloc/request_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/core/icons/app_icon.dart';
+import 'package:api_client/core/utils/parameter_list_formatter.dart';
+import 'package:api_client/core/utils/response_size_calculator.dart';
 import 'package:api_client/data/model/request_model.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/presentation/drawer_page/drawer_page.dart';
@@ -18,7 +20,9 @@ import 'package:api_client/widgets/key_card.dart';
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interactive_json_preview/interactive_json_preview.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:uuid/uuid.dart';
 
 // final fruits = {
 //   'get': 'GET',
@@ -125,6 +129,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppConstant.appPadding),
       child: Column(
@@ -145,7 +150,15 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 flex: 1,
                 child: ShadSelect<String>(
-                  placeholder: const Text('POST'),
+                  placeholder: BlocBuilder<HomeBloc, HomeBlocState>(
+                    builder: (context, state) {
+                      if (state is HomeBlocState_Loaded) {
+                        return Text(state.currentMethod.name);
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
                   options: [
                     ...HTTP_METHOD.values.map(
                       (e) => ShadOption(value: e.name, child: Text(e.name)),
@@ -244,10 +257,36 @@ class _HomePageState extends State<HomePage> {
                     listener: (context, state) {
                       if (state is RequestBlocState_Error) {
                         ElegantNotification.error(
+                          //displayCloseButton: false,
+                          showProgressIndicator: false,
+                          toastDuration: AppConstant.errorToastDuration,
                           description: Text(state.error),
+                          height: 500,
                         ).show(context);
                       } else if (state is RequestBlocState_Success) {
                         logger.i('GET RESPONSE');
+                          ElegantNotification.success(
+                            notificationMargin: AppConstant.appPadding,
+                          displayCloseButton: true,
+                          action: ShadButton.secondary(child: Text('Save to more detail'),),
+                          showProgressIndicator: true,
+                          toastDuration: AppConstant.errorToastDuration,
+                          title: Row(
+                            spacing: AppConstant.appPadding,
+                            children: [
+                              Text(state.response.statusCode.toString()),
+                              Text(state.response.statusMessage.toString()),
+                              Text(calculateTotalResponseSize(state.response).toString() + 'bytes')
+                            ],
+                          ),
+                          description: SizedBox(
+                            width: 500,
+                            height: 500,
+                            child: InteractiveJsonPreview(data: state.response.data,)),
+                          //description: Text(state.response.data.toString(), maxLines: 20,),
+                          height: size.height * 0.8,
+                          width: size.width * 0.8,
+                        ).show(context);
                       }
                     },
 
@@ -256,13 +295,25 @@ class _HomePageState extends State<HomePage> {
                         return ShadButton(
                           child: const Text('Send Request'),
                           onPressed: () {
+
+                            /// get full path request
+                            final requestFullPath =
+                                homeBlocState.endpoint +
+                                homeBlocState.endpointMethod;
+
+                            /// generate request model
                             final RequestModel request = RequestModel(
-                              id: '4',
-                              httpMethod: HTTP_METHOD.GET,
-                              url: 'https://jsonplaceholder.typicode.com/todos/1',
+                              id: Uuid().v4().substring(0, 8),
+                              queryParameters: parameterListFormatter(paramsList: homeBlocState.queryParameters),
+                              httpMethod: homeBlocState.currentMethod,
+                              url: requestFullPath,
                               createdAt: DateTime.now(),
+                              body: homeBlocState.bodyContent,
+                              headers: parameterListFormatter(paramsList: homeBlocState.headerParameters)
                             );
 
+
+                            /// send request model to request bloc
                             context.read<RequestBloc>().add(
                               RequestBlocEvent_make_request(
                                 requestModel: request,

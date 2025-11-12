@@ -14,7 +14,7 @@ class RequestModel {
   final String url;
 
   /// URL endpoint
-  final Map<String, String> headers;
+  final Map<String, dynamic> headers;
 
   /// Заголовки запроса
   final Map<String, dynamic> queryParameters;

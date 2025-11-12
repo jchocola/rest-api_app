@@ -7,17 +7,17 @@ class DioHttpServiceRepoImpl implements HttpServiceRepository {
   final Dio dio = Dio();
 
   @override
-  Future<void> makeDELETErequest() {
+  Future<void> makeDELETErequest({required RequestModel request}) {
     // TODO: implement makeDELETErequest
     throw UnimplementedError();
   }
 
   @override
-  Future<void> makeGETrequest({required RequestModel request}) async {
+  Future<Response> makeGETrequest({required RequestModel request}) async {
     try {
       final path = request.url;
       final queryParameters = request.queryParameters;
-      final options = Options(headers: {});
+      final options = Options(headers: request.headers);
 
       final Response response = await dio.get(
         path,
@@ -26,37 +26,39 @@ class DioHttpServiceRepoImpl implements HttpServiceRepository {
       );
 
       logger.i(response.data.toString());
+
+      return response;
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<void> makeHEADrequest() {
+  Future<void> makeHEADrequest({required RequestModel request}) {
     // TODO: implement makeHEADrequest
     throw UnimplementedError();
   }
 
   @override
-  Future<void> makeOPTIONSrequest() {
+  Future<void> makeOPTIONSrequest({required RequestModel request}) {
     // TODO: implement makeOPTIONSrequest
     throw UnimplementedError();
   }
 
   @override
-  Future<void> makePATCHrequest() {
+  Future<void> makePATCHrequest({required RequestModel request}) {
     // TODO: implement makePATCHrequest
     throw UnimplementedError();
   }
 
   @override
-  Future<void> makePOSTrequest() {
-    // TODO: implement makePOSTrequest
+  Future<void> makePOSTrequest({required RequestModel request}) async{
+   // await dio.post(path)
     throw UnimplementedError();
   }
 
   @override
-  Future<void> makePUTrequest() {
+  Future<void> makePUTrequest({required RequestModel request}) {
     // TODO: implement makePUTrequest
     throw UnimplementedError();
   }
