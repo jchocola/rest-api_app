@@ -31,4 +31,7 @@ class AppConstant {
   static const String tab_response = 'response';
   static const String tab_cookies = 'cookies';
   static const String tab_request_params = 'request_params';
+
+
+    static const String tab_requests = 'requests';
 }

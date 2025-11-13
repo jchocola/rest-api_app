@@ -12,7 +12,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 final logger = Logger();
 
 void main() {
-
+  WidgetsFlutterBinding.ensureInitialized();
   // set dependencies
   configureDependencies();
 

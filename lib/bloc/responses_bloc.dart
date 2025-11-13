@@ -41,9 +41,12 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
   final LocalStorageRepository responsesLocalStorageRepo;
   ResponsesBloc({required this.responsesLocalStorageRepo})
     : super(ResponsesBlocState_initial()) {
+
+      
     on<ResponsesBlocEvent_init>((event, emit) async {
       try {
-        responsesLocalStorageRepo.getAllResponse();
+        final responseList = await responsesLocalStorageRepo.getAllResponse();
+        emit(ResponsesBlocState_loaded(responses: responseList));
       } catch (e) {
         emit(ResponsesBlocState_error());
       }
