@@ -20,7 +20,8 @@ class ObjectBoxLocalStorageImpl implements LocalStorageRepository {
   Future<List<ResponseModel>> getAllResponse() async {
     try {
       logger.i(responseBox.count());
-      return [];
+      final responses = responseBox.getAll() as List<ResponseModel>;
+      return responses;
     } catch (e) {
       rethrow;
     }

@@ -1,18 +1,20 @@
 import 'package:api_client/core/icons/app_icon.dart';
+import 'package:api_client/data/model/response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class HistoryCard extends StatelessWidget {
-  const HistoryCard({super.key, this.onTap});
-  final  void Function()? onTap;
+  const HistoryCard({super.key, this.onTap , required this.responseModel});
+  final void Function()? onTap;
+  final ResponseModel responseModel;
   @override
   Widget build(BuildContext context) {
     return Slidable(
-       endActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: ScrollMotion(),
         children: [
-           SlidableAction(
+          SlidableAction(
             // An action can be bigger than the others.
             // flex: 2,
             onPressed: (context) {},
@@ -31,9 +33,7 @@ class HistoryCard extends StatelessWidget {
             label: 'Re-use',
           ),
           SlidableAction(
-            onPressed: (context) {
-            
-            },
+            onPressed: (context) {},
             //backgroundColor: Color(0xFF0392CF),
             // foregroundColor: Colors.white,
             icon: AppIcons.deleteIcon,
@@ -44,8 +44,9 @@ class HistoryCard extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: ShadCard(
-          title: const Text('https://api.example.com/data', maxLines: 2),
-          description: const Text('GET • 2024-06-15 14:30'),
+          width: double.infinity,
+          title:  Text(responseModel.body, maxLines: 2),
+          description:  Text(responseModel.statusCode.toString()),
           trailing: ShadBadge.secondary(child: const Text('200 OK')),
         ),
       ),

@@ -52,7 +52,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
               ],
             ),
-        
+
             buildContent(context),
           ],
           // children: List.generate(
@@ -88,7 +88,12 @@ class _HistoryPageState extends State<HistoryPage> {
     return BlocBuilder<ResponsesBloc, ResponsesBlocState>(
       builder: (context, state) {
         if (state is ResponsesBlocState_loaded) {
-          return Text('We have data');
+          return Column(
+            spacing: AppConstant.appPadding,
+            children: List.generate(state.responses.length, (index) {
+              return HistoryCard(responseModel: state.responses[index],);
+            }),
+          );
         } else {
           return CircularProgressIndicator();
         }

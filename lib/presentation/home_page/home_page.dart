@@ -1,6 +1,7 @@
 import 'package:api_client/bloc/home_bloc.dart';
 import 'package:api_client/bloc/key_bloc.dart';
 import 'package:api_client/bloc/request_bloc.dart';
+import 'package:api_client/bloc/responses_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/core/icons/app_icon.dart';
@@ -278,12 +279,23 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ShadButton.secondary(
-                                padding: EdgeInsets.all(AppConstant.appPadding/2),
+                                onPressed: () =>
+                                    context.read<ResponsesBloc>().add(
+                                      ResponsesBlocEvent_save_response(
+                                        response: state.response,
+                                      ),
+                                    ),
+                                padding: EdgeInsets.all(
+                                  AppConstant.appPadding / 2,
+                                ),
                                 child: Text('Save Response'),
                               ),
                               ShadButton.secondary(
-                                 padding: EdgeInsets.all(AppConstant.appPadding/2),
-                                child: Text('Save Request')),
+                                padding: EdgeInsets.all(
+                                  AppConstant.appPadding / 2,
+                                ),
+                                child: Text('Save Request'),
+                              ),
                             ],
                           ),
                           showProgressIndicator: true,
