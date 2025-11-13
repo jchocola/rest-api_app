@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   animated_rating_stars
   flutter_secure_storage_x_linux
+  objectbox_flutter_libs
   url_launcher_linux
 )
 

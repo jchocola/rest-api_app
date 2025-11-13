@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   animated_rating_stars
   flutter_secure_storage_x_windows
+  objectbox_flutter_libs
   share_plus
   url_launcher_windows
 )

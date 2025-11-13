@@ -1,0 +1,79 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:6252344056220842342",
+      "lastPropertyId": "15:1891970489467051978",
+      "name": "ResponseModel",
+      "properties": [
+        {
+          "id": "1:7781434923888294841",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "8:1765185365898212930",
+          "name": "requestId",
+          "type": 9
+        },
+        {
+          "id": "9:327941238483880056",
+          "name": "statusCode",
+          "type": 6
+        },
+        {
+          "id": "10:1785590117697847469",
+          "name": "body",
+          "type": 9
+        },
+        {
+          "id": "11:4570476412155728953",
+          "name": "size",
+          "type": 6
+        },
+        {
+          "id": "12:8852059660327418858",
+          "name": "isCached",
+          "type": 1
+        },
+        {
+          "id": "13:6845735097468893073",
+          "name": "error",
+          "type": 9
+        },
+        {
+          "id": "14:3518428800766289616",
+          "name": "headersJson",
+          "type": 9
+        },
+        {
+          "id": "15:1891970489467051978",
+          "name": "responseTimeMs",
+          "type": 6
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:6252344056220842342",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    7871219635448067208,
+    1353642512713215052,
+    4865653772492112720,
+    1754482443840694371,
+    6582779969642996236,
+    9194246531960346251
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
