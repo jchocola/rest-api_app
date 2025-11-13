@@ -1,7 +1,8 @@
 import 'package:api_client/bloc/responses_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
-import 'package:api_client/presentation/response_page/response_page.dart';
-import 'package:api_client/widgets/history_card.dart';
+import 'package:api_client/widgets/empty_widget.dart';
+import 'package:api_client/widgets/history_request_card.dart';
+import 'package:api_client/widgets/history_response_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -30,7 +31,7 @@ class _HistoryPageState extends State<HistoryPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 16,
+          spacing: AppConstant.appPadding,
           children: [
             ShadTabs(
               //  controller: _tabsController,
@@ -75,7 +76,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget buildContent(context) {
     switch (index) {
       case AppConstant.tab_requests:
-        return Text('Requests');
+        return buildRequests(context);
       case AppConstant.tab_response:
         return buildResponses(context);
 
@@ -84,16 +85,30 @@ class _HistoryPageState extends State<HistoryPage> {
     }
   }
 
+  Widget buildRequests(context) {
+    return Column(
+       spacing: AppConstant.appPadding, 
+      children: List.generate(5, (index) => HistoryRequestCard()));
+  }
+
   Widget buildResponses(context) {
     return BlocBuilder<ResponsesBloc, ResponsesBlocState>(
       builder: (context, state) {
         if (state is ResponsesBlocState_loaded) {
-          return Column(
-            spacing: AppConstant.appPadding,
-            children: List.generate(state.responses.length, (index) {
-              return HistoryCard(responseModel: state.responses[index],);
-            }),
-          );
+          if (state.responses.isEmpty) {
+            return EmptyWidget();
+          } else {
+            return SlidableAutoCloseBehavior(
+              child: Column(
+                spacing: AppConstant.appPadding,
+                children: List.generate(state.responses.length, (index) {
+                  return HistoryResponseCard(
+                    responseModel: state.responses[index],
+                  );
+                }),
+              ),
+            );
+          }
         } else {
           return CircularProgressIndicator();
         }

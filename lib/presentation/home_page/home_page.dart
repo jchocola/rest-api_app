@@ -288,7 +288,7 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.all(
                                   AppConstant.appPadding / 2,
                                 ),
-                                child: Text('Save Response'),
+                                child: Text('Save response'),
                               ),
                               ShadButton.secondary(
                                 padding: EdgeInsets.all(

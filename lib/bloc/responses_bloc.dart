@@ -22,6 +22,12 @@ class ResponsesBlocEvent_save_response extends ResponsesBlocEvent {
   ResponsesBlocEvent_save_response({required this.response});
 }
 
+class ResponsesBlocEvent_delete_response extends ResponsesBlocEvent {
+  final ResponseModel response;
+
+  ResponsesBlocEvent_delete_response({required this.response});
+}
+
 ///
 /// RESPONSES BLOC STATE
 ///
@@ -60,7 +66,10 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
       }
     });
 
-    on<ResponsesBlocEvent_save_response>((event, emit) async{
+    ///
+    /// RESPONSE BLOC EVENT - SAVE
+    ///
+    on<ResponsesBlocEvent_save_response>((event, emit) async {
       try {
         final ResponseModel responseModel = ResponseModel(
           requestId: '1',
@@ -74,6 +83,16 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
         await responsesLocalStorageRepo.insertData(response: responseModel);
       } catch (e) {
         emit(ResponsesBlocState_error());
+      } finally {
+        add(ResponsesBlocEvent_init());
+      }
+    });
+
+    on<ResponsesBlocEvent_delete_response>((event, emit) async {
+      try {
+        await responsesLocalStorageRepo.deleteData(response: event.response);
+      } catch (e) {
+        rethrow;
       } finally {
         add(ResponsesBlocEvent_init());
       }

@@ -11,9 +11,13 @@ class ObjectBoxLocalStorageImpl implements LocalStorageRepository {
     : responseBox = store.box<ResponseModel>();
 
   @override
-  Future<void> deleteData({required ResponseModel response}) {
-    // TODO: implement deleteData
-    throw UnimplementedError();
+  Future<void> deleteData({required ResponseModel response}) async {
+    try {
+       responseBox.remove(response.id);
+      logger.i('Deleted response');
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override

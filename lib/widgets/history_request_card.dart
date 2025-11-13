@@ -1,13 +1,17 @@
+import 'package:api_client/bloc/responses_bloc.dart';
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/data/model/response_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class HistoryCard extends StatelessWidget {
-  const HistoryCard({super.key, this.onTap , required this.responseModel});
+class HistoryRequestCard extends StatelessWidget {
+  const HistoryRequestCard({
+    super.key,
+    this.onTap,
+  });
   final void Function()? onTap;
-  final ResponseModel responseModel;
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -45,9 +49,9 @@ class HistoryCard extends StatelessWidget {
         onTap: onTap,
         child: ShadCard(
           width: double.infinity,
-          title:  Text(responseModel.body, maxLines: 2),
-          description:  Text(responseModel.statusCode.toString()),
-          trailing: ShadBadge.secondary(child: const Text('200 OK')),
+          title: Text('https://coin.com', maxLines: 2, ),
+          description: Text('6 days ago'),
+          trailing: ShadBadge.secondary(child: const Text('GET')),
         ),
       ),
     );
