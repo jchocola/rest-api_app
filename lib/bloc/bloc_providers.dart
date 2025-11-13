@@ -7,7 +7,7 @@ import 'package:api_client/core/di/di.dart';
 import 'package:api_client/data/repository/http_service_repository.dart';
 import 'package:api_client/data/repository/local_storage_repository.dart';
 import 'package:api_client/data/repository/secure_storage_repository.dart';
-import 'package:api_client/domain/repository/object_box_local_storage_impl.dart';
+
 import 'package:api_client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

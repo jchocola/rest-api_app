@@ -263,15 +263,29 @@ class _HomePageState extends State<HomePage> {
                           showProgressIndicator: false,
                           toastDuration: AppConstant.errorToastDuration,
                           title: Text('Check passed parameters again'),
-                          description: Text(state.error),
+                          action: ShadButton.secondary(
+                            child: Text('Save Request'),
+                          ),
+                          description: Text(state.error, maxLines: 20),
                           height: 500,
                         ).show(context);
                       } else if (state is RequestBlocState_Success) {
                         logger.i('GET RESPONSE');
-                          ElegantNotification.success(
-                            notificationMargin: AppConstant.appPadding,
+                        ElegantNotification.success(
+                          notificationMargin: AppConstant.appPadding,
                           displayCloseButton: true,
-                          action: ShadButton.secondary(child: Text('Save to more detail'),),
+                          action: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ShadButton.secondary(
+                                padding: EdgeInsets.all(AppConstant.appPadding/2),
+                                child: Text('Save Response'),
+                              ),
+                              ShadButton.secondary(
+                                 padding: EdgeInsets.all(AppConstant.appPadding/2),
+                                child: Text('Save Request')),
+                            ],
+                          ),
                           showProgressIndicator: true,
                           toastDuration: AppConstant.errorToastDuration,
                           title: Row(
@@ -279,13 +293,21 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(state.response.statusCode.toString()),
                               Text(state.response.statusMessage.toString()),
-                              Text(calculateTotalResponseSize(state.response).toString() + 'bytes')
+                              Text(
+                                calculateTotalResponseSize(
+                                      state.response,
+                                    ).toString() +
+                                    'bytes',
+                              ),
                             ],
                           ),
                           description: SizedBox(
                             width: 500,
                             height: 500,
-                            child: InteractiveJsonPreview(data: state.response.data,)),
+                            child: InteractiveJsonPreview(
+                              data: state.response.data,
+                            ),
+                          ),
                           //description: Text(state.response.data.toString(), maxLines: 20,),
                           height: size.height * 0.8,
                           width: size.width * 0.8,
@@ -298,7 +320,6 @@ class _HomePageState extends State<HomePage> {
                         return ShadButton(
                           child: const Text('Send Request'),
                           onPressed: () {
-
                             /// get full path request
                             final requestFullPath =
                                 homeBlocState.endpoint +
@@ -307,7 +328,9 @@ class _HomePageState extends State<HomePage> {
                             /// generate request model
                             final RequestModel request = RequestModel(
                               id: Uuid().v4().substring(0, 8),
-                              queryParameters: parameterListFormatter(paramsList: homeBlocState.queryParameters),
+                              queryParameters: parameterListFormatter(
+                                paramsList: homeBlocState.queryParameters,
+                              ),
                               httpMethod: homeBlocState.currentMethod,
                               url: requestFullPath,
                               createdAt: DateTime.now(),
@@ -316,13 +339,14 @@ class _HomePageState extends State<HomePage> {
                               username: homeBlocState.username,
                               password: homeBlocState.password,
                               bearerToken: homeBlocState.bearerToken,
-                              bearerTokenPrefix: homeBlocState.bearerTokenPrefix,
+                              bearerTokenPrefix:
+                                  homeBlocState.bearerTokenPrefix,
                               oauthToken: homeBlocState.oauth2AccessToken,
                               oauthTokenPrefix: homeBlocState.oauth2TokenPrefix,
-                              headers: parameterListFormatter(paramsList: homeBlocState.headerParameters),
-
+                              headers: parameterListFormatter(
+                                paramsList: homeBlocState.headerParameters,
+                              ),
                             );
-
 
                             /// send request model to request bloc
                             context.read<RequestBloc>().add(
