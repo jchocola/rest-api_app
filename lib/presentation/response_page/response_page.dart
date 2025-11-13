@@ -1,4 +1,4 @@
-import 'package:api_client/bloc/response_bloc.dart';
+import 'package:api_client/bloc/response_page_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/presentation/response_page/widgets/header_viewer_widget.dart';
 import 'package:api_client/presentation/response_page/widgets/response_viewer_widget.dart';
@@ -66,14 +66,14 @@ class _ResponsePageState extends State<ResponsePage> {
   }
 
   Widget _buildTab(context) {
-    return BlocBuilder<ResponseBloc, ResponseBlocState>(
+    return BlocBuilder<ResponsePageBloc, ResponsePageBlocState>(
       builder: (context, state) {
-        if (state is ResponseState_loaded) {
+        if (state is ResponsePageState_loaded) {
           return ShadTabs(
             scrollable: true,
             onChanged: (value) {
-              context.read<ResponseBloc>().add(
-                ResponseEvent_change_tab_index(value: value),
+              context.read<ResponsePageBloc>().add(
+                ResponsePageEvent_change_tab_index(value: value),
               );
             },
             value: state.tabIndex,
@@ -106,9 +106,9 @@ class _ResponsePageState extends State<ResponsePage> {
   }
 
   Widget _buidContent(context) {
-    return BlocBuilder<ResponseBloc, ResponseBlocState>(
+    return BlocBuilder<ResponsePageBloc, ResponsePageBlocState>(
       builder: (context, state) {
-        if (state is ResponseState_loaded) {
+        if (state is ResponsePageState_loaded) {
           switch (state.tabIndex) {
             case AppConstant.tab_response:
               return ResponseViewerWidget();
