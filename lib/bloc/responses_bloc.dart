@@ -1,5 +1,8 @@
 // ignore_for_file: camel_case_types
 
+import 'package:api_client/core/utils/parameter_list_formatter.dart';
+import 'package:api_client/core/utils/response_size_calculator.dart';
+import 'package:api_client/data/model/parameter_model.dart';
 import 'package:api_client/data/model/response_model.dart';
 import 'package:api_client/data/repository/local_storage_repository.dart';
 import 'package:api_client/main.dart';
@@ -20,8 +23,9 @@ class ResponsesBlocEvent_init extends ResponsesBlocEvent {}
 
 class ResponsesBlocEvent_save_response extends ResponsesBlocEvent {
   final Response response;
+  final List<ParameterModel> params;
 
-  ResponsesBlocEvent_save_response({required this.response});
+  ResponsesBlocEvent_save_response({required this.response , required this.params});
 }
 
 class ResponsesBlocEvent_delete_response extends ResponsesBlocEvent {
@@ -78,11 +82,15 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
         final ResponseModel responseModel = ResponseModel(
           id: id,
           requestId: '1',
+          endpointUrl: event.response.realUri.toString(),
           statusCode: event.response.statusCode ?? 200,
           headersJson: event.response.headers.toString(),
           body: event.response.data,
-          size: 434,
+          size: calculateTotalResponseSize(event.response),
           responseTimeMs: 424,
+          cookies: event.response.headers['set-cookie'].toString(),
+          parameters: convertListParamsToString(listParams:  event.params),
+          created: DateTime.now()
         );
 
         logger.i('SAVE RESPONSE : BODY ${event.response.data.toString()}');

@@ -24,3 +24,26 @@ Map<String, dynamic> parameterListFormatter({
 
   return map;
 }
+
+List<ParameterModel> parameterListFormatter2({
+  required List<ParameterModel> paramsList,
+}) {
+  List<ParameterModel> map = [];
+  for (var param in paramsList) {
+    if (!param.isSelected) {
+      continue;
+    } else {
+      map.add(param);
+    }
+  }
+  return map;
+}
+
+String convertListParamsToString({required List<ParameterModel> listParams}) {
+  String str = """ """;
+  for (var model in listParams) {
+    str += model.parameter + '\t:\t' + model.value + '\n';
+  }
+
+  return str;
+}

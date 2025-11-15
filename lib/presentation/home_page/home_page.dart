@@ -282,6 +282,8 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () =>
                                     context.read<ResponsesBloc>().add(
                                       ResponsesBlocEvent_save_response(
+
+                                        params: parameterListFormatter2(paramsList: homeBlocState.queryParameters),
                                         response: state.response,
                                       ),
                                     ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:api_client/data/model/parameter_model.dart';
 import 'package:objectbox/objectbox.dart';
 
 //@Entity()
@@ -31,6 +32,15 @@ class ResponseModel {
   /// Ошибка (если есть)
   final String? error;
 
+  final String endpointUrl;
+
+  final String cookies;
+
+  final String parameters;
+
+  final DateTime created;
+
+
   ResponseModel({
     required this.id,
     required this.requestId,
@@ -41,6 +51,10 @@ class ResponseModel {
     required this.responseTimeMs,
     this.isCached = false,
     this.error,
+    required this.endpointUrl,
+    required this.cookies,
+    required this.parameters,
+    required this.created
   });
 
   /// Getter для получения headers из JSON
@@ -66,6 +80,10 @@ class ResponseModel {
       'responseTimeMs': responseTimeMs,
       'isCached': isCached,
       'error': error,
+      'endpointUrl': endpointUrl,
+      'cookies': cookies,
+      'parameters': parameters,
+      'created': created.millisecondsSinceEpoch,
     };
   }
 
@@ -80,6 +98,11 @@ class ResponseModel {
       responseTimeMs: map['responseTimeMs']?.toInt() ?? 0,
       isCached: map['isCached'] ?? false,
       error: map['error'],
+      endpointUrl: map['endpointUrl'] ?? '',
+      cookies: map['cookies'] ?? '',
+      parameters: map['parameters'] ?? [],
+      //created: DateTime.now()
+       created: DateTime.fromMillisecondsSinceEpoch(map['created'] ?? DateTime.now())
     );
   }
 

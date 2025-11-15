@@ -1,6 +1,8 @@
 import 'package:api_client/bloc/response_page_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
+import 'package:api_client/presentation/response_info_page/widgets/cookies_viewer_widget.dart';
 import 'package:api_client/presentation/response_info_page/widgets/header_viewer_widget.dart';
+import 'package:api_client/presentation/response_info_page/widgets/request_params_widget.dart';
 import 'package:api_client/presentation/response_info_page/widgets/response_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +35,7 @@ class ResponseInfoPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ShadButton.secondary(child: Text('Call again')),
-              ShadButton.secondary(child: Text('Re-use')),
+             // ShadButton.secondary(child: Text('Re-use')),
               ShadButton.secondary(child: Text('Delete')),
             ],
           ),
@@ -43,19 +45,32 @@ class ResponseInfoPage extends StatelessWidget {
   }
 
   Widget _buildStatus(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        ShadBadge.secondary(
-          child: Column(children: [Text('Status'), Text('200')]),
-        ),
-        ShadBadge.secondary(
-          child: Column(children: [Text('Size'), Text('43.5KB')]),
-        ),
-        ShadBadge.secondary(
-          child: Column(children: [Text('Times'), Text('0.32s')]),
-        ),
-      ],
+    return BlocBuilder<ResponsePageBloc, ResponsePageBlocState>(
+      builder: (context, state) {
+        if (state is ResponsePageState_loaded) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ShadBadge.secondary(
+                child: Column(
+                  children: [
+                    Text('Status'),
+                    Text(state.selectedResponse?.statusCode.toString() ?? ''),
+                  ],
+                ),
+              ),
+              ShadBadge.secondary(
+                child: Column(children: [Text('Size'), Text('43.5KB')]),
+              ),
+              ShadBadge.secondary(
+                child: Column(children: [Text('Times'), Text('0.32s')]),
+              ),
+            ],
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 
@@ -109,9 +124,9 @@ class ResponseInfoPage extends StatelessWidget {
             case AppConstant.tab_headers:
               return HeaderViewerWidget();
             case AppConstant.tab_cookies:
-              return ResponseViewerWidget();
+              return CookiesViewerWidget();
             case AppConstant.tab_request_params:
-              return ResponseViewerWidget();
+              return RequestParamsWidget();
             default:
               return SizedBox();
           }
@@ -123,20 +138,28 @@ class ResponseInfoPage extends StatelessWidget {
   }
 
   Widget _buildRequestBody() {
-    return Row(
-      children: [
-        // method selector
-        Expanded(flex: 1, child: ShadButton.ghost(child: Text('GET'))),
-        // input fields
-        const SizedBox(width: AppConstant.appPadding),
-        Expanded(
-          flex: 3,
-          child: ShadInput(
-            placeholder: Text('URL'),
-            keyboardType: TextInputType.emailAddress,
-          ),
-        ),
-      ],
+    return BlocBuilder<ResponsePageBloc, ResponsePageBlocState>(
+      builder: (context, state) {
+        if (state is ResponsePageState_loaded) {
+          return Row(
+            children: [
+              // method selector
+              Expanded(flex: 1, child: ShadButton.ghost(child: Text('GET'))),
+              // input fields
+              const SizedBox(width: AppConstant.appPadding),
+              Expanded(
+                flex: 3,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SelectableText(state.selectedResponse?.endpointUrl ?? ''),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }
