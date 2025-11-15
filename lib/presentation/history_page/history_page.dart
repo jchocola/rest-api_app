@@ -1,5 +1,5 @@
 import 'package:api_client/bloc/response_page_bloc.dart';
-import 'package:api_client/bloc/responses_bloc.dart';
+import 'package:api_client/bloc/history_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/presentation/response_info_page/response_info_page.dart';
 import 'package:api_client/widgets/empty_widget.dart';
@@ -98,9 +98,9 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Widget buildResponses(context) {
-    return BlocBuilder<ResponsesBloc, ResponsesBlocState>(
+    return BlocBuilder<HistoryBloc, HistoryBlocState>(
       builder: (context, state) {
-        if (state is ResponsesBlocState_loaded) {
+        if (state is HistoryBlocState_loaded) {
           if (state.responses.isEmpty) {
             return EmptyWidget();
           } else {

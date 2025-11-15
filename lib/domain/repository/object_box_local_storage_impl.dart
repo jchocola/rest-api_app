@@ -1,10 +1,10 @@
 import 'package:api_client/data/model/response_model.dart';
-import 'package:api_client/data/repository/local_storage_repository.dart';
+import 'package:api_client/data/repository/local_storage_repository_res.dart';
 import 'package:api_client/main.dart';
 // import 'package:api_client/objectbox.g.dart';
 import 'package:objectbox/objectbox.dart';
 
-class ObjectBoxLocalStorageImpl implements LocalStorageRepository {
+class ObjectBoxLocalStorageImpl implements LocalStorageRepositoryRes {
   late final Store store;
   final Box responseBox;
   ObjectBoxLocalStorageImpl({required this.store})
@@ -13,7 +13,7 @@ class ObjectBoxLocalStorageImpl implements LocalStorageRepository {
   @override
   Future<void> deleteData({required ResponseModel response}) async {
     try {
-       responseBox.remove(response.id);
+      responseBox.remove(response.id);
       logger.i('Deleted response');
     } catch (e) {
       rethrow;

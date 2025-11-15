@@ -1,8 +1,8 @@
 import 'package:api_client/data/repository/http_service_repository.dart';
-import 'package:api_client/data/repository/local_storage_repository.dart';
+import 'package:api_client/data/repository/local_storage_repository_res.dart';
 import 'package:api_client/data/repository/secure_storage_repository.dart';
 import 'package:api_client/domain/repository/dio_http_service_repo_impl.dart';
-import 'package:api_client/domain/repository/localstore_local_storage_impl.dart';
+import 'package:api_client/domain/repository/localstore_local_storage_res_impl.dart';
 import 'package:api_client/domain/repository/object_box_local_storage_impl.dart';
 import 'package:api_client/domain/repository/secure_storage_repo_impl.dart';
 
@@ -25,16 +25,14 @@ void configureDependencies() async {
     () => SecureStorageRepoImpl(),
   ); // secure storage for save keys
 
-
-
   //final objectBoxStore = await createStoreForResponse();  /// using for openbox localstorage
 
   // getIt.registerLazySingleton<LocalStorageRepository>(
   //   () => ObjectBoxLocalStorageImpl(store: objectBoxStore),
   // ); //local storage for save response
 
-    getIt.registerLazySingleton<LocalStorageRepository>(
-    () => LocalstoreLocalStorageImpl(),
+  getIt.registerLazySingleton<LocalStorageRepositoryRes>(
+    () => LocalstoreLocalStorageImpl_response(),
   ); //local storage for save response
 
   logger.i('Configured dependencies');

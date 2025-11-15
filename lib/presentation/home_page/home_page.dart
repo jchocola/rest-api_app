@@ -1,7 +1,7 @@
 import 'package:api_client/bloc/home_bloc.dart';
 import 'package:api_client/bloc/key_bloc.dart';
 import 'package:api_client/bloc/request_bloc.dart';
-import 'package:api_client/bloc/responses_bloc.dart';
+import 'package:api_client/bloc/history_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
 import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/core/icons/app_icon.dart';
@@ -280,11 +280,15 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               ShadButton.secondary(
                                 onPressed: () =>
-                                    context.read<ResponsesBloc>().add(
-                                      ResponsesBlocEvent_save_response(
+                                    context.read<HistoryBloc>().add(
+                                      HistoryBlocEvent_save_response(
                                         responseTime: state.responseTime,
-                                        currentMethod: homeBlocState.currentMethod,
-                                        params: parameterListFormatter2(paramsList: homeBlocState.queryParameters),
+                                        currentMethod:
+                                            homeBlocState.currentMethod,
+                                        params: parameterListFormatter2(
+                                          paramsList:
+                                              homeBlocState.queryParameters,
+                                        ),
                                         response: state.response,
                                       ),
                                     ),
@@ -315,7 +319,7 @@ class _HomePageState extends State<HomePage> {
                                     'bytes',
                               ),
 
-                              Text( '${state.responseTime} ms')
+                              Text('${state.responseTime} ms'),
                             ],
                           ),
                           description: SizedBox(

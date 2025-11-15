@@ -1,9 +1,11 @@
+// ignore_for_file: camel_case_types
+
 import 'package:api_client/data/model/response_model.dart';
-import 'package:api_client/data/repository/local_storage_repository.dart';
+import 'package:api_client/data/repository/local_storage_repository_res.dart';
 import 'package:api_client/main.dart';
 import 'package:localstore/localstore.dart';
 
-class LocalstoreLocalStorageImpl implements LocalStorageRepository {
+class LocalstoreLocalStorageImpl_response implements LocalStorageRepositoryRes {
   final db = Localstore.instance.collection('Responses');
 
   @override

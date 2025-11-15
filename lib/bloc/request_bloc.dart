@@ -18,6 +18,11 @@ class RequestBlocEvent_make_request extends RequestBlocEvent {
   RequestBlocEvent_make_request({required this.requestModel});
 }
 
+class RequestBlocEvent_save_request extends RequestBlocEvent {
+  final RequestModel requestModel;
+  RequestBlocEvent_save_request({required this.requestModel});
+}
+
 ///
 /// REQUEST BLOC STATE
 ///
@@ -58,7 +63,7 @@ class RequestBloc extends Bloc<RequestBlocEvent, RequestBlocState> {
 
       try {
         // reset timer
-        _stopWatchTimer.onResetTimer() ;
+        _stopWatchTimer.onResetTimer();
 
         // Start timer.
         _stopWatchTimer.onStartTimer();
@@ -116,6 +121,13 @@ class RequestBloc extends Bloc<RequestBlocEvent, RequestBlocState> {
       } finally {
         emit(RequestBlocState_Initial());
       }
+    });
+
+    ///
+    /// REQUEST BLOC EVENT SAVE REQUEST
+    ///
+    on<RequestBlocEvent_save_request>((event, emit) {
+      
     });
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:api_client/core/enum/http_method.dart';
 
 class RequestModel {
@@ -84,4 +86,60 @@ class RequestModel {
     this.collectionId,
     this.tags = const [],
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'httpMethod': httpMethod.name,
+      'url': url,
+      'headers': headers,
+      'queryParameters': queryParameters,
+      'body': body,
+      'username': username,
+      'password': password,
+      'bearerToken': bearerToken,
+      'bearerTokenPrefix': bearerTokenPrefix,
+      'oauthToken': oauthToken,
+      'oauthTokenPrefix': oauthTokenPrefix,
+      'timeout': timeout,
+      'followRedirects': followRedirects,
+      'maxRedirects': maxRedirects,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+      'updatedAt': updatedAt?.millisecondsSinceEpoch,
+      'collectionId': collectionId,
+      'tags': tags,
+    };
+  }
+
+  factory RequestModel.fromMap(Map<String, dynamic> map) {
+    return RequestModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      description: map['description'],
+      httpMethod: httpMethodConvertFromString(value: map['httpMethod']),
+      url: map['url'] ?? '',
+      headers: Map<String, dynamic>.from(map['headers']),
+      queryParameters: Map<String, dynamic>.from(map['queryParameters']),
+      body: map['body'],
+      username: map['username'],
+      password: map['password'],
+      bearerToken: map['bearerToken'],
+      bearerTokenPrefix: map['bearerTokenPrefix'],
+      oauthToken: map['oauthToken'],
+      oauthTokenPrefix: map['oauthTokenPrefix'],
+      timeout: map['timeout']?.toInt() ?? 0,
+      followRedirects: map['followRedirects'] ?? false,
+      maxRedirects: map['maxRedirects']?.toInt() ?? 0,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      updatedAt: map['updatedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt']) : null,
+      collectionId: map['collectionId'],
+      tags: List<String>.from(map['tags']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory RequestModel.fromJson(String source) => RequestModel.fromMap(json.decode(source));
 }

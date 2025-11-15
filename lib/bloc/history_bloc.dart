@@ -5,7 +5,7 @@ import 'package:api_client/core/utils/parameter_list_formatter.dart';
 import 'package:api_client/core/utils/response_size_calculator.dart';
 import 'package:api_client/data/model/parameter_model.dart';
 import 'package:api_client/data/model/response_model.dart';
-import 'package:api_client/data/repository/local_storage_repository.dart';
+import 'package:api_client/data/repository/local_storage_repository_res.dart';
 import 'package:api_client/main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,24 +18,24 @@ import 'package:uuid/uuid.dart';
 ///
 /// RESPONSES BLOC EVENT
 ///
-abstract class ResponsesBlocEvent {}
+abstract class HistoryBlocEvent {}
 
-class ResponsesBlocEvent_init extends ResponsesBlocEvent {}
+class HistoryBlocEvent_init extends HistoryBlocEvent {}
 
-class ResponsesBlocEvent_save_response extends ResponsesBlocEvent {
+class HistoryBlocEvent_save_response extends HistoryBlocEvent {
   final Response response;
   final List<ParameterModel> params;
   final HTTP_METHOD currentMethod;
   final int responseTime;
-  ResponsesBlocEvent_save_response({
+  HistoryBlocEvent_save_response({
     required this.response,
     required this.params,
     required this.currentMethod,
-    required this.responseTime
+    required this.responseTime,
   });
 }
 
-class ResponsesBlocEvent_delete_response extends ResponsesBlocEvent {
+class ResponsesBlocEvent_delete_response extends HistoryBlocEvent {
   final ResponseModel response;
 
   ResponsesBlocEvent_delete_response({required this.response});
@@ -45,44 +45,44 @@ class ResponsesBlocEvent_delete_response extends ResponsesBlocEvent {
 /// RESPONSES BLOC STATE
 ///
 
-abstract class ResponsesBlocState {}
+abstract class HistoryBlocState {}
 
-class ResponsesBlocState_initial extends ResponsesBlocState {}
+class HistoryBlocState_initial extends HistoryBlocState {}
 
-class ResponsesBlocState_loading extends ResponsesBlocState {}
+class HistoryBlocState_loading extends HistoryBlocState {}
 
-class ResponsesBlocState_loaded extends ResponsesBlocState {
+class HistoryBlocState_loaded extends HistoryBlocState {
   final List<ResponseModel> responses;
 
-  ResponsesBlocState_loaded({required this.responses});
+  HistoryBlocState_loaded({required this.responses});
 }
 
-class ResponsesBlocState_error extends ResponsesBlocState {}
+class HistoryBlocState_error extends HistoryBlocState {}
 
 ///
 /// RESPONSES BLOC
 ///
 
-class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
-  final LocalStorageRepository responsesLocalStorageRepo;
-  ResponsesBloc({required this.responsesLocalStorageRepo})
-    : super(ResponsesBlocState_initial()) {
+class HistoryBloc extends Bloc<HistoryBlocEvent, HistoryBlocState> {
+  final LocalStorageRepositoryRes responsesLocalStorageRepo;
+  HistoryBloc({required this.responsesLocalStorageRepo})
+    : super(HistoryBlocState_initial()) {
     ///
     /// RESPONSE BLOC EVENT - INIT
     ///
-    on<ResponsesBlocEvent_init>((event, emit) async {
+    on<HistoryBlocEvent_init>((event, emit) async {
       try {
         final responseList = await responsesLocalStorageRepo.getAllResponse();
-        emit(ResponsesBlocState_loaded(responses: responseList));
+        emit(HistoryBlocState_loaded(responses: responseList));
       } catch (e) {
-        emit(ResponsesBlocState_error());
+        emit(HistoryBlocState_error());
       }
     });
 
     ///
     /// RESPONSE BLOC EVENT - SAVE
     ///
-    on<ResponsesBlocEvent_save_response>((event, emit) async {
+    on<HistoryBlocEvent_save_response>((event, emit) async {
       try {
         final id = DateTime.now().microsecondsSinceEpoch;
 
@@ -99,16 +99,16 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
           parameters: convertListParamsToString(listParams: event.params),
           created: DateTime.now(),
           httpMethod: event.currentMethod,
-          responseTime: event.responseTime
+          responseTime: event.responseTime,
         );
 
         logger.i('SAVE RESPONSE : BODY ${event.response.data.toString()}');
 
         await responsesLocalStorageRepo.insertData(response: responseModel);
       } catch (e) {
-        emit(ResponsesBlocState_error());
+        emit(HistoryBlocState_error());
       } finally {
-        add(ResponsesBlocEvent_init());
+        add(HistoryBlocEvent_init());
       }
     });
 
@@ -116,9 +116,9 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
       try {
         await responsesLocalStorageRepo.deleteData(response: event.response);
       } catch (e) {
-        emit(ResponsesBlocState_error());
+        emit(HistoryBlocState_error());
       } finally {
-        add(ResponsesBlocEvent_init());
+        add(HistoryBlocEvent_init());
       }
     });
   }

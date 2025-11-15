@@ -1,4 +1,4 @@
-import 'package:api_client/bloc/responses_bloc.dart';
+import 'package:api_client/bloc/history_bloc.dart';
 import 'package:api_client/core/icons/app_icon.dart';
 import 'package:api_client/data/model/response_model.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class HistoryResponseCard extends StatelessWidget {
           // ),
           SlidableAction(
             onPressed: (context) {
-              context.read<ResponsesBloc>().add(
+              context.read<HistoryBloc>().add(
                 ResponsesBlocEvent_delete_response(response: responseModel),
               );
             },
@@ -61,10 +61,12 @@ class HistoryResponseCard extends StatelessWidget {
             children: [
               Text(responseModel.httpMethod.name),
 
-              Text(responseModel.created.toString().substring(0,16))
+              Text(responseModel.created.toString().substring(0, 16)),
             ],
           ),
-          trailing: ShadBadge.secondary(child: Text(responseModel.statusCode.toString())),
+          trailing: ShadBadge.secondary(
+            child: Text(responseModel.statusCode.toString()),
+          ),
         ),
       ),
     );
