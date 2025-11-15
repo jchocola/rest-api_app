@@ -5,6 +5,7 @@ import 'package:api_client/data/repository/local_storage_repository.dart';
 import 'package:api_client/main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 /// RESPONSES BLOC = USING FOR CONTROL SAVED RESPONSED
 
@@ -72,11 +73,14 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
     ///
     on<ResponsesBlocEvent_save_response>((event, emit) async {
       try {
+        final id = DateTime.now().microsecondsSinceEpoch;
+
         final ResponseModel responseModel = ResponseModel(
+          id: id,
           requestId: '1',
           statusCode: event.response.statusCode ?? 200,
           headersJson: event.response.headers.toString(),
-          body: event.response.data.toString(),
+          body: event.response.data,
           size: 434,
           responseTimeMs: 424,
         );
@@ -95,7 +99,7 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
       try {
         await responsesLocalStorageRepo.deleteData(response: event.response);
       } catch (e) {
-        rethrow;
+        emit(ResponsesBlocState_error());
       } finally {
         add(ResponsesBlocEvent_init());
       }

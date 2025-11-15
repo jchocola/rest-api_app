@@ -1,20 +1,15 @@
 import 'package:api_client/data/model/response_model.dart';
 import 'package:api_client/data/repository/local_storage_repository.dart';
 import 'package:api_client/main.dart';
-// import 'package:api_client/objectbox.g.dart';
-import 'package:objectbox/objectbox.dart';
+import 'package:localstore/localstore.dart';
 
-class ObjectBoxLocalStorageImpl implements LocalStorageRepository {
-  late final Store store;
-  final Box responseBox;
-  ObjectBoxLocalStorageImpl({required this.store})
-    : responseBox = store.box<ResponseModel>();
+class LocalstoreLocalStorageImpl implements LocalStorageRepository {
+  final db = Localstore.instance.collection('Responses');
 
   @override
   Future<void> deleteData({required ResponseModel response}) async {
     try {
-       responseBox.remove(response.id);
-      logger.i('Deleted response');
+      await db.doc(response.id.toString()).delete();
     } catch (e) {
       rethrow;
     }
@@ -23,9 +18,15 @@ class ObjectBoxLocalStorageImpl implements LocalStorageRepository {
   @override
   Future<List<ResponseModel>> getAllResponse() async {
     try {
-      logger.i(responseBox.count());
-      final responses = responseBox.getAll() as List<ResponseModel>;
-      return responses;
+      final items = await db.get();
+
+      logger.i(items?.entries.length);
+      return items?.entries.map((e) {
+            final raw = Map<String, dynamic>.from(e.value as Map);
+            raw.putIfAbsent('id', () => int.tryParse(e.key) ?? 0);
+            return ResponseModel.fromMap(raw);
+          }).toList() ??
+          [];
     } catch (e) {
       rethrow;
     }
@@ -34,8 +35,7 @@ class ObjectBoxLocalStorageImpl implements LocalStorageRepository {
   @override
   Future<void> insertData({required ResponseModel response}) async {
     try {
-      responseBox.put(response);
-      logger.i('Inserted new Data');
+      await db.doc(response.id.toString()).set(response.toMap());
     } catch (e) {
       rethrow;
     }

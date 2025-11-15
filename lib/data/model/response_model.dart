@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:objectbox/objectbox.dart';
 
-@Entity()
+//@Entity()
 class ResponseModel {
-
-  @Id()
-  int id = 0;
+  //@Id()
+  final int id;
 
   /// ID связанного запроса
   final String requestId;
@@ -18,7 +17,7 @@ class ResponseModel {
   final String headersJson;
 
   /// Тело ответа
-  final String body;
+  final dynamic body;
 
   /// Размер ответа в байтах
   final int size;
@@ -33,6 +32,7 @@ class ResponseModel {
   final String? error;
 
   ResponseModel({
+    required this.id,
     required this.requestId,
     required this.statusCode,
     required this.headersJson,
@@ -43,7 +43,7 @@ class ResponseModel {
     this.error,
   });
 
-   /// Getter для получения headers из JSON
+  /// Getter для получения headers из JSON
   Map<String, String> get headers {
     try {
       return Map<String, String>.from(jsonDecode(headersJson) as Map);
@@ -54,4 +54,37 @@ class ResponseModel {
 
   /// Getter для получения responseTime из миллисекунд
   Duration get responseTime => Duration(milliseconds: responseTimeMs);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'requestId': requestId,
+      'statusCode': statusCode,
+      'headersJson': headersJson,
+      'body': body,
+      'size': size,
+      'responseTimeMs': responseTimeMs,
+      'isCached': isCached,
+      'error': error,
+    };
+  }
+
+  factory ResponseModel.fromMap(Map<String, dynamic> map) {
+    return ResponseModel(
+      id: map['id']?.toInt() ?? 0,
+      requestId: map['requestId'] ?? '',
+      statusCode: map['statusCode']?.toInt() ?? 0,
+      headersJson: map['headersJson'] ?? '',
+      body: map['body'] ?? null,
+      size: map['size']?.toInt() ?? 0,
+      responseTimeMs: map['responseTimeMs']?.toInt() ?? 0,
+      isCached: map['isCached'] ?? false,
+      error: map['error'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ResponseModel.fromJson(String source) =>
+      ResponseModel.fromMap(json.decode(source));
 }

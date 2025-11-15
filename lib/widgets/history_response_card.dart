@@ -55,7 +55,7 @@ class HistoryResponseCard extends StatelessWidget {
         onTap: onTap,
         child: ShadCard(
           width: double.infinity,
-          title: Text(responseModel.body, maxLines: 2),
+          title: Text(responseModel.body.toString(), maxLines: 2),
           description: Text(responseModel.statusCode.toString()),
           trailing: ShadBadge.secondary(child: const Text('200 OK')),
         ),

@@ -54,8 +54,8 @@ class ResponseViewerWidget extends StatelessWidget {
     return BlocBuilder<ResponsePageBloc, ResponsePageBlocState>(
       builder: (context, state) {
         if (state is ResponsePageState_loaded) {
-          return Text(
-              state.selectedResponse!.body,
+          return InteractiveJsonPreview(
+              data:  state.selectedResponse!.body,
           );
         } else {
           return CircularProgressIndicator();
