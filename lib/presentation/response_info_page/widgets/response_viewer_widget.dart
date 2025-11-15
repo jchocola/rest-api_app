@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:api_client/bloc/response_page_bloc.dart';
+import 'package:api_client/presentation/response_info_page/response_info_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interactive_json_preview/interactive_json_preview.dart';
 
 class ResponseViewerWidget extends StatelessWidget {
   ResponseViewerWidget({super.key});
 
-  final data = {
+  final Map<String, Map<String, Object>> data = {
     "author": {
       "name": "Yeikel",
       "lastName": "Uriarte",
@@ -44,6 +49,18 @@ class ResponseViewerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InteractiveJsonPreview(data: data);
+    //return InteractiveJsonPreview(data: data);
+
+    return BlocBuilder<ResponsePageBloc, ResponsePageBlocState>(
+      builder: (context, state) {
+        if (state is ResponsePageState_loaded) {
+          return Text(
+              state.selectedResponse!.body,
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 }

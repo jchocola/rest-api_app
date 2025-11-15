@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 6252344056220842342),
     name: 'ResponseModel',
-    lastPropertyId: const obx_int.IdUid(15, 1891970489467051978),
+    lastPropertyId: const obx_int.IdUid(16, 3282784342342743513),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -41,12 +41,6 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(9, 327941238483880056),
         name: 'statusCode',
         type: 6,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(10, 1785590117697847469),
-        name: 'body',
-        type: 9,
         flags: 0,
       ),
       obx_int.ModelProperty(
@@ -77,6 +71,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(15, 1891970489467051978),
         name: 'responseTimeMs',
         type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(16, 3282784342342743513),
+        name: 'body',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -136,6 +136,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       1754482443840694371,
       6582779969642996236,
       9194246531960346251,
+      1785590117697847469,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -154,21 +155,21 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (ResponseModel object, fb.Builder fbb) {
         final requestIdOffset = fbb.writeString(object.requestId);
-        final bodyOffset = fbb.writeString(object.body);
         final errorOffset = object.error == null
             ? null
             : fbb.writeString(object.error!);
         final headersJsonOffset = fbb.writeString(object.headersJson);
-        fbb.startTable(16);
+        final bodyOffset = fbb.writeString(object.body);
+        fbb.startTable(17);
         fbb.addInt64(0, object.id);
         fbb.addOffset(7, requestIdOffset);
         fbb.addInt64(8, object.statusCode);
-        fbb.addOffset(9, bodyOffset);
         fbb.addInt64(10, object.size);
         fbb.addBool(11, object.isCached);
         fbb.addOffset(12, errorOffset);
         fbb.addOffset(13, headersJsonOffset);
         fbb.addInt64(14, object.responseTimeMs);
+        fbb.addOffset(15, bodyOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -189,7 +190,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 30, '');
         final bodyParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 22, '');
+        ).vTableGet(buffer, rootOffset, 34, '');
         final sizeParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -247,33 +248,33 @@ class ResponseModel_ {
     _entities[0].properties[2],
   );
 
-  /// See [ResponseModel.body].
-  static final body = obx.QueryStringProperty<ResponseModel>(
-    _entities[0].properties[3],
-  );
-
   /// See [ResponseModel.size].
   static final size = obx.QueryIntegerProperty<ResponseModel>(
-    _entities[0].properties[4],
+    _entities[0].properties[3],
   );
 
   /// See [ResponseModel.isCached].
   static final isCached = obx.QueryBooleanProperty<ResponseModel>(
-    _entities[0].properties[5],
+    _entities[0].properties[4],
   );
 
   /// See [ResponseModel.error].
   static final error = obx.QueryStringProperty<ResponseModel>(
-    _entities[0].properties[6],
+    _entities[0].properties[5],
   );
 
   /// See [ResponseModel.headersJson].
   static final headersJson = obx.QueryStringProperty<ResponseModel>(
-    _entities[0].properties[7],
+    _entities[0].properties[6],
   );
 
   /// See [ResponseModel.responseTimeMs].
   static final responseTimeMs = obx.QueryIntegerProperty<ResponseModel>(
+    _entities[0].properties[7],
+  );
+
+  /// See [ResponseModel.body].
+  static final body = obx.QueryStringProperty<ResponseModel>(
     _entities[0].properties[8],
   );
 }

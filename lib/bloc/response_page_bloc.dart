@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'package:api_client/data/model/response_model.dart';
 import 'package:api_client/main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,6 +21,11 @@ class ResponsePageEvent_change_tab_index extends ResponsePageBlocEvent {
   ResponsePageEvent_change_tab_index({required this.value});
 }
 
+class ResponsePageEvent_set_responsemodel extends ResponsePageBlocEvent {
+  final ResponseModel model;
+  ResponsePageEvent_set_responsemodel({required this.model});
+}
+
 ///
 /// RESPONSE STATE
 ///
@@ -31,10 +37,17 @@ class ResponsePageState_loading extends ResponsePageBlocState {}
 
 class ResponsePageState_loaded extends ResponsePageBlocState {
   final String tabIndex;
-  ResponsePageState_loaded({required this.tabIndex});
+  final ResponseModel? selectedResponse;
+  ResponsePageState_loaded({required this.tabIndex, this.selectedResponse});
 
-  ResponsePageState_loaded copyWith({String? tabIndex}) {
-    return ResponsePageState_loaded(tabIndex: tabIndex ?? this.tabIndex);
+  ResponsePageState_loaded copyWith({
+    String? tabIndex,
+    ResponseModel? responseModel,
+  }) {
+    return ResponsePageState_loaded(
+      tabIndex: tabIndex ?? this.tabIndex,
+      selectedResponse: responseModel ?? this.selectedResponse,
+    );
   }
 }
 
@@ -65,6 +78,18 @@ class ResponsePageBloc
       logger.i('RESPONSE EVENT - change tab index value ${event.value}');
       if (currentState is ResponsePageState_loaded) {
         emit(currentState.copyWith(tabIndex: event.value));
+      }
+    });
+
+      ///
+    /// RESPONSE EVET - SET RESPONSE MODEL
+    ///
+    on<ResponsePageEvent_set_responsemodel>((event, emit) {
+      final currentState = state;
+
+      logger.i('RESPONSE EVENT - SET RESPONSE MODEL ${event.model}');
+      if (currentState is ResponsePageState_loaded) {
+        emit(currentState.copyWith(responseModel: event.model));
       }
     });
   }

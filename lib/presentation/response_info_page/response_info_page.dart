@@ -1,21 +1,15 @@
 import 'package:api_client/bloc/response_page_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
-import 'package:api_client/presentation/response_page/widgets/header_viewer_widget.dart';
-import 'package:api_client/presentation/response_page/widgets/response_viewer_widget.dart';
+import 'package:api_client/presentation/response_info_page/widgets/header_viewer_widget.dart';
+import 'package:api_client/presentation/response_info_page/widgets/response_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class ResponsePage extends StatefulWidget {
-  const ResponsePage({super.key});
+class ResponseInfoPage extends StatelessWidget {
+  const ResponseInfoPage({super.key});
 
-  @override
-  State<ResponsePage> createState() => _ResponsePageState();
-}
-
-class _ResponsePageState extends State<ResponsePage> {
   // String selectedTab = 'Response';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(child: _buildBody(context)));

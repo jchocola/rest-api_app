@@ -2,6 +2,7 @@
 
 import 'package:api_client/data/model/response_model.dart';
 import 'package:api_client/data/repository/local_storage_repository.dart';
+import 'package:api_client/main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -75,10 +76,12 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
           requestId: '1',
           statusCode: event.response.statusCode ?? 200,
           headersJson: event.response.headers.toString(),
-          body: event.response.extra.toString(),
+          body: event.response.data.toString(),
           size: 434,
           responseTimeMs: 424,
         );
+
+        logger.i('SAVE RESPONSE : BODY ${event.response.data.toString()}');
 
         await responsesLocalStorageRepo.insertData(response: responseModel);
       } catch (e) {

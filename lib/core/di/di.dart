@@ -8,6 +8,7 @@ import 'package:api_client/domain/repository/secure_storage_repo_impl.dart';
 import 'package:api_client/main.dart';
 import 'package:api_client/objectbox.g.dart';
 import 'package:get_it/get_it.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:path_provider/path_provider.dart';
 
 final getIt = GetIt.instance;

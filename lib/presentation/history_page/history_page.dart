@@ -1,11 +1,14 @@
+import 'package:api_client/bloc/response_page_bloc.dart';
 import 'package:api_client/bloc/responses_bloc.dart';
 import 'package:api_client/core/constant/app_constant.dart';
+import 'package:api_client/presentation/response_info_page/response_info_page.dart';
 import 'package:api_client/widgets/empty_widget.dart';
 import 'package:api_client/widgets/history_request_card.dart';
 import 'package:api_client/widgets/history_response_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -86,9 +89,12 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Widget buildRequests(context) {
-    return Column(
-       spacing: AppConstant.appPadding, 
-      children: List.generate(5, (index) => HistoryRequestCard()));
+    return SlidableAutoCloseBehavior(
+      child: Column(
+        spacing: AppConstant.appPadding,
+        children: List.generate(5, (index) => HistoryRequestCard()),
+      ),
+    );
   }
 
   Widget buildResponses(context) {
@@ -103,6 +109,29 @@ class _HistoryPageState extends State<HistoryPage> {
                 spacing: AppConstant.appPadding,
                 children: List.generate(state.responses.length, (index) {
                   return HistoryResponseCard(
+                    onTap: () {
+                      ///
+                      /// SET A SELECTED RESPONSE MODEL
+                      ///
+                      context.read<ResponsePageBloc>().add(
+                        ResponsePageEvent_set_responsemodel(
+                          model: state.responses[index],
+                        ),
+                      );
+
+                      ///
+                      /// GO TO RESPONSE PAGE INFO
+                      ///
+
+                      context.push('/response_info');
+
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => ResponseInfoPage(),
+                      //   ),
+                      // );
+                    },
                     responseModel: state.responses[index],
                   );
                 }),
