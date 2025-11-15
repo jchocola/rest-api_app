@@ -35,7 +35,7 @@ class ResponseInfoPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ShadButton.secondary(child: Text('Call again')),
-             // ShadButton.secondary(child: Text('Re-use')),
+              // ShadButton.secondary(child: Text('Re-use')),
               ShadButton.secondary(child: Text('Delete')),
             ],
           ),
@@ -60,7 +60,7 @@ class ResponseInfoPage extends StatelessWidget {
                 ),
               ),
               ShadBadge.secondary(
-                child: Column(children: [Text('Size'), Text('43.5KB')]),
+                child: Column(children: [Text('Size'), Text('${state.selectedResponse?.size.toString()} bytes')]),
               ),
               ShadBadge.secondary(
                 child: Column(children: [Text('Times'), Text('0.32s')]),
@@ -144,14 +144,21 @@ class ResponseInfoPage extends StatelessWidget {
           return Row(
             children: [
               // method selector
-              Expanded(flex: 1, child: ShadButton.ghost(child: Text('GET'))),
+              Expanded(
+                flex: 1,
+                child: ShadButton.ghost(
+                  child: Text(state.selectedResponse?.httpMethod.name ?? ''),
+                ),
+              ),
               // input fields
               const SizedBox(width: AppConstant.appPadding),
               Expanded(
                 flex: 3,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: SelectableText(state.selectedResponse?.endpointUrl ?? ''),
+                  child: SelectableText(
+                    state.selectedResponse?.endpointUrl ?? '',
+                  ),
                 ),
               ),
             ],

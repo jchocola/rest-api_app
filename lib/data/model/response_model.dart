@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/data/model/parameter_model.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -40,6 +41,7 @@ class ResponseModel {
 
   final DateTime created;
 
+  final HTTP_METHOD httpMethod;
 
   ResponseModel({
     required this.id,
@@ -54,7 +56,8 @@ class ResponseModel {
     required this.endpointUrl,
     required this.cookies,
     required this.parameters,
-    required this.created
+    required this.created,
+    required this.httpMethod
   });
 
   /// Getter для получения headers из JSON
@@ -84,6 +87,7 @@ class ResponseModel {
       'cookies': cookies,
       'parameters': parameters,
       'created': created.millisecondsSinceEpoch,
+      'httpMethod' : httpMethod.name
     };
   }
 
@@ -102,7 +106,11 @@ class ResponseModel {
       cookies: map['cookies'] ?? '',
       parameters: map['parameters'] ?? [],
       //created: DateTime.now()
-       created: DateTime.fromMillisecondsSinceEpoch(map['created'] ?? DateTime.now())
+      created: DateTime.fromMillisecondsSinceEpoch(
+        map['created'] ?? DateTime.now(),
+      ),
+
+      httpMethod: httpMethodConvertFromString(value:  map['httpMethod'] ?? 'GET')
     );
   }
 

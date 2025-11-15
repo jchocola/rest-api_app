@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 
+import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/core/utils/parameter_list_formatter.dart';
 import 'package:api_client/core/utils/response_size_calculator.dart';
 import 'package:api_client/data/model/parameter_model.dart';
@@ -24,8 +25,12 @@ class ResponsesBlocEvent_init extends ResponsesBlocEvent {}
 class ResponsesBlocEvent_save_response extends ResponsesBlocEvent {
   final Response response;
   final List<ParameterModel> params;
-
-  ResponsesBlocEvent_save_response({required this.response , required this.params});
+  final HTTP_METHOD currentMethod;
+  ResponsesBlocEvent_save_response({
+    required this.response,
+    required this.params,
+    required this.currentMethod
+  });
 }
 
 class ResponsesBlocEvent_delete_response extends ResponsesBlocEvent {
@@ -89,8 +94,9 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
           size: calculateTotalResponseSize(event.response),
           responseTimeMs: 424,
           cookies: event.response.headers['set-cookie'].toString(),
-          parameters: convertListParamsToString(listParams:  event.params),
-          created: DateTime.now()
+          parameters: convertListParamsToString(listParams: event.params),
+          created: DateTime.now(),
+          httpMethod: event.currentMethod
         );
 
         logger.i('SAVE RESPONSE : BODY ${event.response.data.toString()}');

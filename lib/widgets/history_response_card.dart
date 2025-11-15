@@ -59,7 +59,7 @@ class HistoryResponseCard extends StatelessWidget {
           description: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('GET'),
+              Text(responseModel.httpMethod.name),
 
               Text(responseModel.created.toString().substring(0,16))
             ],
