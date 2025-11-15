@@ -54,6 +54,7 @@ dependencies:
   objectbox_flutter_libs: any
   path_provider: ^2.1.5
   localstore: ^1.4.0
+  stop_watch_timer: ^3.2.2
 
 dev_dependencies:
   flutter_test:

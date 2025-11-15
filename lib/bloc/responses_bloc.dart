@@ -26,10 +26,12 @@ class ResponsesBlocEvent_save_response extends ResponsesBlocEvent {
   final Response response;
   final List<ParameterModel> params;
   final HTTP_METHOD currentMethod;
+  final int responseTime;
   ResponsesBlocEvent_save_response({
     required this.response,
     required this.params,
-    required this.currentMethod
+    required this.currentMethod,
+    required this.responseTime
   });
 }
 
@@ -96,7 +98,8 @@ class ResponsesBloc extends Bloc<ResponsesBlocEvent, ResponsesBlocState> {
           cookies: event.response.headers['set-cookie'].toString(),
           parameters: convertListParamsToString(listParams: event.params),
           created: DateTime.now(),
-          httpMethod: event.currentMethod
+          httpMethod: event.currentMethod,
+          responseTime: event.responseTime
         );
 
         logger.i('SAVE RESPONSE : BODY ${event.response.data.toString()}');

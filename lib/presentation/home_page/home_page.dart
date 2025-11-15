@@ -282,6 +282,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () =>
                                     context.read<ResponsesBloc>().add(
                                       ResponsesBlocEvent_save_response(
+                                        responseTime: state.responseTime,
                                         currentMethod: homeBlocState.currentMethod,
                                         params: parameterListFormatter2(paramsList: homeBlocState.queryParameters),
                                         response: state.response,
@@ -313,6 +314,8 @@ class _HomePageState extends State<HomePage> {
                                     ).toString() +
                                     'bytes',
                               ),
+
+                              Text( '${state.responseTime} ms')
                             ],
                           ),
                           description: SizedBox(

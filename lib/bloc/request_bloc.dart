@@ -3,8 +3,10 @@
 import 'package:api_client/core/enum/http_method.dart';
 import 'package:api_client/data/model/request_model.dart';
 import 'package:api_client/data/repository/http_service_repository.dart';
+import 'package:api_client/main.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 /// REQUEST BLOC EVENT
 ///
@@ -32,7 +34,11 @@ class RequestBlocState_Error extends RequestBlocState {
 
 class RequestBlocState_Success extends RequestBlocState {
   final Response response;
-  RequestBlocState_Success({required this.response});
+  final int responseTime; // in millisec
+  RequestBlocState_Success({
+    required this.response,
+    required this.responseTime,
+  });
 }
 
 ///
@@ -40,6 +46,8 @@ class RequestBlocState_Success extends RequestBlocState {
 ///
 class RequestBloc extends Bloc<RequestBlocEvent, RequestBlocState> {
   final HttpServiceRepository httpServiceRepository;
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer(); // Create instance.
+
   RequestBloc({required this.httpServiceRepository})
     : super(RequestBlocState_Initial()) {
     ///
@@ -49,6 +57,12 @@ class RequestBloc extends Bloc<RequestBlocEvent, RequestBlocState> {
       emit(RequestBlocState_Loading());
 
       try {
+        // reset timer
+        _stopWatchTimer.onResetTimer() ;
+
+        // Start timer.
+        _stopWatchTimer.onStartTimer();
+
         late Response response;
 
         switch (event.requestModel.httpMethod) {
@@ -86,8 +100,17 @@ class RequestBloc extends Bloc<RequestBlocEvent, RequestBlocState> {
               request: event.requestModel,
             );
         }
+        // Stop timer.
+        _stopWatchTimer.onStopTimer();
 
-        emit(RequestBlocState_Success(response: response));
+        logger.i(_stopWatchTimer.rawTime.value.toString());
+
+        emit(
+          RequestBlocState_Success(
+            response: response,
+            responseTime: _stopWatchTimer.rawTime.value,
+          ),
+        );
       } catch (e) {
         emit(RequestBlocState_Error(error: e.toString()));
       } finally {

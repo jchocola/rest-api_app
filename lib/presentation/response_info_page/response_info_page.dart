@@ -60,10 +60,15 @@ class ResponseInfoPage extends StatelessWidget {
                 ),
               ),
               ShadBadge.secondary(
-                child: Column(children: [Text('Size'), Text('${state.selectedResponse?.size.toString()} bytes')]),
+                child: Column(
+                  children: [
+                    Text('Size'),
+                    Text('${state.selectedResponse?.size.toString()} bytes'),
+                  ],
+                ),
               ),
               ShadBadge.secondary(
-                child: Column(children: [Text('Times'), Text('0.32s')]),
+                child: Column(children: [Text('Times'), Text("${state.selectedResponse?.responseTime} ms")]),
               ),
             ],
           );

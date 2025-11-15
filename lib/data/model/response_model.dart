@@ -43,6 +43,8 @@ class ResponseModel {
 
   final HTTP_METHOD httpMethod;
 
+  final int responseTime;
+
   ResponseModel({
     required this.id,
     required this.requestId,
@@ -57,7 +59,8 @@ class ResponseModel {
     required this.cookies,
     required this.parameters,
     required this.created,
-    required this.httpMethod
+    required this.httpMethod,
+    required this.responseTime,
   });
 
   /// Getter для получения headers из JSON
@@ -69,8 +72,7 @@ class ResponseModel {
     }
   }
 
-  /// Getter для получения responseTime из миллисекунд
-  Duration get responseTime => Duration(milliseconds: responseTimeMs);
+ 
 
   Map<String, dynamic> toMap() {
     return {
@@ -87,7 +89,8 @@ class ResponseModel {
       'cookies': cookies,
       'parameters': parameters,
       'created': created.millisecondsSinceEpoch,
-      'httpMethod' : httpMethod.name
+      'httpMethod': httpMethod.name,
+      'responseTime': responseTime
     };
   }
 
@@ -110,7 +113,10 @@ class ResponseModel {
         map['created'] ?? DateTime.now(),
       ),
 
-      httpMethod: httpMethodConvertFromString(value:  map['httpMethod'] ?? 'GET')
+      httpMethod: httpMethodConvertFromString(
+        value: map['httpMethod'] ?? 'GET',
+      ),
+      responseTime: map['responseTime'] ?? 0
     );
   }
 
